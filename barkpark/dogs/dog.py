@@ -5,3 +5,6 @@ class Dog:
         self.__breed = breed
         self.__age = age
         pass
+
+    def get_name(self):
+        return self.__name
