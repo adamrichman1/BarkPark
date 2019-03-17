@@ -7,8 +7,9 @@ import java.util.ArrayList;
 /**
  * This class represents a User in the BarkPark system.
  */
-public abstract class User {
+public class User {
     private String username;
+    private String password;
     private String name;
     private int age;
     private String email;
@@ -24,6 +25,14 @@ public abstract class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -46,16 +55,19 @@ public abstract class User {
         this.email = email;
     }
 
+    public ArrayList<Dog> getDogs() {
+        return dogs;
+    }
+
+    public void setDogs(ArrayList<Dog> dogs) {
+        this.dogs = dogs;
+    }
+
     public void addDog(Dog d) {
         dogs.add(d);
     }
 
-    public boolean removeDog(Dog d) {
-        if (dogs.contains(d)) {
-            dogs.remove(d);
-            return true;
-        } else {
-            return false;
-        }
+    public void removeDog(Dog d) {
+        dogs.remove(d);
     }
 }

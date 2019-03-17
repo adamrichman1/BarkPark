@@ -5,20 +5,20 @@ package BarkPark.Dogs;
  */
 public class Dog {
     private String name;
-    private String owner;
+    private String ownerUsername;
     private String breed;
     private int age;
 
-    public Dog(String name, String owner, String breed, int age) {
+    Dog(String name, String ownerUsername, String breed, int age) {
         this.name = name;
-        this.owner = owner;
+        this.ownerUsername = ownerUsername;
         this.breed = breed;
         this.age = age;
     }
 
     public String getName() { return name; }
 
-    public String getOwner() { return owner; }
+    public String getOwnerUsername() { return ownerUsername; }
 
     public String getBreed() { return breed; }
 
