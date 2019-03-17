@@ -1,6 +1,6 @@
 package BarkPark.Users;
 
-import BarkPark.DBManager;
+import BarkPark.Core.DBManager;
 
 /**
  * This class contains query functionality that is general to users of the BarkPark application.

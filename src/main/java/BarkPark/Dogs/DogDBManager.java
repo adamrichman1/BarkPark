@@ -1,6 +1,6 @@
 package BarkPark.Dogs;
 
-import BarkPark.DBManager;
+import BarkPark.Core.DBManager;
 
 /**
  * This class contains database/query functionality specific to FixIT customers

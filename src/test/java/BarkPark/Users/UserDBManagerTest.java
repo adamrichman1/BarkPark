@@ -1,17 +1,15 @@
 package BarkPark.Users;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.After;
+import org.junit.Before;
 
 class UserDBManagerTest {
 
-    @BeforeEach
+    @Before
     void setUp() {
     }
 
-    @AfterEach
+    @After
     void tearDown() {
     }
 }
