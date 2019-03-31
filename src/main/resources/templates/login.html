@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Welcome to BarkPark</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+<header th:replace="fragments/base.html::test"> </header>
+<div class="container">
+
+    <form class="form-signin" id="signin-form">
+        <h2 class="form-signin-heading">Login to BarkPark</h2>
+        <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+        <button class="btn btn-lg btn-primary btn-block" id="login-button" type="button">Sign in</button>
+    </form>
+
+</div> <!-- /container -->
+
+<div id="sign-up-link" class="container">
+    <span>New User? <a href="http://localhost:8080/signup">Sign Up</a></span>
+</div>
+
+<div id="signup" class="container">
+    <span><a href="http://localhost:8080/signup">Join now!</a></span>
+</div>
+
+</body>
+</html>
+
+<script>
+    button = document.getElementById('login-button');
+    button.addEventListener('click', function() {
+        const formData = JSON.stringify({
+            username: document.getElementById('inputUsername').value,
+            password: document.getElementById('inputPassword').value
+        });
+        document.getElementById("signin-form").reset();
+        console.log(formData);
+        $.ajax({
+            url: "http://localhost:8080/login",
+            type: 'POST',
+            data: formData,
+            contentType: "application/json",
+            success: function() {
+                // TODO - FIX ENDPOINT
+                window.location.href = "/home";
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.status);
+                console.log(textStatus);
+                console.log(errorThrown);
+                // TODO - ERROR HANDLE
+            }
+        });
+    });
+</script>
