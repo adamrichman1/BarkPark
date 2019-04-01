@@ -32,8 +32,7 @@
         <input id="email" class="form-control" placeholder="Email" required>
         <input id="firstname" class="form-control" placeholder="First Name" required>
         <input id="lastname" class="form-control" placeholder="Last Name" required>
-        <input id="address" class="form-control" placeholder="Address" required>
-        <input id="creditcard" class="form-control" placeholder="Credit Card #" required>
+        <input id="age" class="form-control" placeholder="Age" required>
         <br />
         <button class="btn btn-lg btn-primary btn-block" id="signup-button" type="button">Sign up</button>
     </form>
@@ -54,8 +53,7 @@
             "password": document.getElementById('inputPassword').value,
             "email":  document.getElementById('email').value,
             "name":  document.getElementById('firstname').value + " " + document.getElementById('lastname').value,
-            "address":  document.getElementById('address').value,
-            "creditCard":  document.getElementById('creditcard').value
+            "age":  document.getElementById('age').value,
         });
         document.getElementById("signup-form").reset();
         console.log(formData);

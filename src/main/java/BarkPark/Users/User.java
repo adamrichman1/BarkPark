@@ -1,12 +1,14 @@
 package BarkPark.Users;
 
 import BarkPark.Dogs.Dog;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 
 /**
  * This class represents a User in the BarkPark system.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     private String username;
     private String password;
@@ -14,6 +16,8 @@ public class User {
     private Integer age;
     private String email;
     private ArrayList<Dog> dogs;
+
+    public User() {}
 
     public User(String username) {
         this.username = username;

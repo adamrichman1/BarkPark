@@ -118,8 +118,7 @@ public class UserRestController {
                 user.getPassword() == null || user.getPassword().equals("") ||
                 user.getEmail() == null || user.getEmail().equals("") ||
                 user.getName() == null || user.getName().equals("") ||
-                user.getAge() == null ||
-                user.getDogs() == null;
+                user.getAge() == null;
     }
 
     /**
