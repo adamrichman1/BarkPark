@@ -41,7 +41,7 @@ public class UserDBManager extends DBManager {
      */
     void insertUserToDB(String username, String password, String name, String email, int age) {
         String sql = "INSERT INTO " + userTable + " (username, password, name, email, age) VALUES (?, ?, ?, ?, ?)";
-        executeUpdate(sql, username, password, name, age);
+        executeUpdate(sql, username, password, name, email, age);
     }
 
     /**
