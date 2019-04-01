@@ -11,7 +11,7 @@ public class User {
     private String username;
     private String password;
     private String name;
-    private int age;
+    private Integer age;
     private String email;
     private ArrayList<Dog> dogs;
 
@@ -43,9 +43,9 @@ public class User {
         this.name = name;
     }
 
-    public int getAge() { return age; }
+    public Integer getAge() { return age; }
 
-    public void setAge(int age) { this.age = age; }
+    public void setAge(Integer age) { this.age = age; }
 
     public String getEmail() {
         return email;

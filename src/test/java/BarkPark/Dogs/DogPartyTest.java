@@ -4,21 +4,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-class DogPartyTest {
+public class DogPartyTest {
 
     @Before
-    void setUp() {
+    public void setUp() {
     }
 
     @After
-    void tearDown() {
+    public void tearDown() {
     }
 
     @Test
-    void testAddUser() {
+    public void testAddUser() {
     }
 
     @Test
-    void testRemoveUser() {
+    public void testRemoveUser() {
     }
 }

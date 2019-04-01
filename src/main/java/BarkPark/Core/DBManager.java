@@ -14,7 +14,7 @@ import java.sql.*;
 public abstract class DBManager {
 
     private static Logger logger = LoggerFactory.getLogger(DBManager.class);
-    private static String dbURL;
+    private static String dbURL = "jdbc:postgresql://localhost:5432/postgres";
 
     /**
      * Used to initialize DBManager resources

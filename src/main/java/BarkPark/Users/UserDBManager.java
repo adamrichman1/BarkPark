@@ -17,7 +17,7 @@ public class UserDBManager extends DBManager {
     private static String userTable = "users";
     private static Logger logger = LoggerFactory.getLogger(UserDBManager.class);
 
-    public UserDBManager() {
+    UserDBManager() {
         createUserTable(userTable);
     }
 
@@ -26,6 +26,7 @@ public class UserDBManager extends DBManager {
                 " (username         TEXT        NOT NULL, " +
                 "password           TEXT        NOT NULL, " +
                 "name               TEXT        NOT NULL, " +
+                "email              TEXT        NOT NULL, " +
                 "age                INT         NOT NULL)";
         executeUpdate(sql);
     }
@@ -38,9 +39,32 @@ public class UserDBManager extends DBManager {
      * @param name the user's name
      * @param age the user's age
      */
-    public void insertUserToDB(String username, String password, String name, int age) {
-        String sql = "INSERT INTO " + userTable + " (username, password, name, age) VALUES (?, ?, ?, ?)";
+    void insertUserToDB(String username, String password, String name, String email, int age) {
+        String sql = "INSERT INTO " + userTable + " (username, password, name, email, age) VALUES (?, ?, ?, ?, ?)";
         executeUpdate(sql, username, password, name, age);
+    }
+
+    /**
+     * Used to check if a user already exists before inserting a user into the database table during registration
+     *
+     * @param username the username to query for
+     * @return true if the username exists in the DB, false otherwise
+     */
+    boolean userExists(String username) {
+        String sql = "SELECT COUNT(*) AS count FROM " + userTable + " WHERE username=?";
+        return deserializeResultSetCol(executeQuery(sql, username), "count", int.class) == 1;
+    }
+
+    /**
+     * Used to determine if a user's username and password are valid upon sign-up
+     *
+     * @param username the user's username
+     * @param password the user's password
+     * @return true if the password is valid for the given username, false otherwise
+     */
+    boolean passwordValid(String username, String password) {
+        String sql = "SELECT COUNT(*) AS count FROM " + userTable + " WHERE username=? AND password=?";
+        return deserializeResultSetCol(executeQuery(sql, username, password), "count", int.class) == 1;
     }
 
     /**

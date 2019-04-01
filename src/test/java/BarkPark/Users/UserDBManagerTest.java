@@ -3,13 +3,13 @@ package BarkPark.Users;
 import org.junit.After;
 import org.junit.Before;
 
-class UserDBManagerTest {
+public class UserDBManagerTest {
 
     @Before
-    void setUp() {
+    public void setUp() {
     }
 
     @After
-    void tearDown() {
+    public void tearDown() {
     }
 }

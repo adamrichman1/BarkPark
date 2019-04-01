@@ -4,25 +4,25 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-class DogDBManagerTest {
+public class DogDBManagerTest {
 
     @Before
-    void setUp() {
+    public void setUp() {
     }
 
     @After
-    void tearDown() {
+    public void tearDown() {
     }
 
     @Test
-    void testInsertDogToDB() {
+    public void testInsertDogToDB() {
     }
 
     @Test
-    void testDogExists() {
+    public void testDogExists() {
     }
 
     @Test
-    void testGetDogEntry() {
+    public void testGetDogEntry() {
     }
 }

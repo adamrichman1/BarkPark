@@ -3,13 +3,13 @@ package BarkPark.Dogs;
 import org.junit.After;
 import org.junit.Before;
 
-class DogRestControllerTest {
+public class DogRestControllerTest {
 
     @Before
-    void setUp() {
+    public void setUp() {
     }
 
     @After
-    void tearDown() {
+    public void tearDown() {
     }
 }
