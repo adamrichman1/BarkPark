@@ -11,11 +11,14 @@
 
     <title>Home</title>
 
+    <script type="text/javascript" th:src="@{/js/home.js}"></script>
+
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -42,11 +45,17 @@
 <div class="container">
 
     <div class="barkpark-home">
-        <h1>BarkPark Home</h1>
-        <p class="lead">Sup.</p>
-        <ul>
-            <li></li>
-        </ul>
+        <h1>Home</h1>
+        <p class="lead">Parks near you</p>
+
+        <div id="map"></div>
+        <div id="right-panel">
+            <h2>Results</h2>
+            <ul id="places"></ul>
+            <button id="more">More results</button>
+        </div>
+        <!-- Replace the value of the key parameter with your own API key. -->
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcfcMeUWpD0fzu565FtGLVBE9CsXdnzso&libraries=places&callback=initMap"></script>
     </div>
 
     <div class="container"></div>
