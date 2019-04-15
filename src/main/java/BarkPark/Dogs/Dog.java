@@ -1,5 +1,7 @@
 package BarkPark.Dogs;
 
+import BarkPark.Application;
+
 /**
  * This class represents a Dog object in the BarkPark application.
  */
@@ -23,4 +25,8 @@ public class Dog {
     public String getBreed() { return breed; }
 
     public int getAge() { return age; }
+
+    public String toString() {
+        return Application.toString(this);
+    }
 }

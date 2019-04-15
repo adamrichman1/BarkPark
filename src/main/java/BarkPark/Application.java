@@ -5,6 +5,8 @@ import BarkPark.Dogs.ParkDBManager;
 import BarkPark.Dogs.PartyDBManager;
 import BarkPark.Users.FriendsDBManager;
 import BarkPark.Users.UserDBManager;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PreDestroy;
+import java.io.IOException;
 
 /**
  * This class contains the main method of the program and manages teardown operations, which are performed upon system
@@ -97,5 +100,21 @@ public class Application {
     private static void initializePartyDBManager() {
         PartyDBManager.dropPartyTable();
         PartyDBManager.createPartyTable();
+    }
+
+    /**
+     * Used to convert an object into a String
+     *
+     * @param o the object to convert to a String
+     * @return the Stringified version of hte object in JSON format
+     */
+    public static String toString(Object o) {
+        ObjectWriter ow = new ObjectMapper().writer();
+        try {
+            return ow.writeValueAsString(o);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

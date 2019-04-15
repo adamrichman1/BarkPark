@@ -1,5 +1,6 @@
 package BarkPark.Users;
 
+import BarkPark.Application;
 import BarkPark.Dogs.Dog;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -73,5 +74,9 @@ public class User {
 
     public void removeDog(Dog d) {
         dogs.remove(d);
+    }
+
+    public String toString() {
+        return Application.toString(this);
     }
 }
