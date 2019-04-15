@@ -1,5 +1,10 @@
 package BarkPark;
 
+import BarkPark.Dogs.DogDBManager;
+import BarkPark.Dogs.ParkDBManager;
+import BarkPark.Dogs.PartyDBManager;
+import BarkPark.Users.FriendsDBManager;
+import BarkPark.Users.UserDBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -30,6 +35,7 @@ public class Application {
 
         // Launch BarkPark
         logger.info("------------ BarkPark Launching ------------");
+        initializeResources();
         SpringApplication.run(Application.class, args);
         logger.info("------------ BarkPark Launched Successfully ------------");
     }
@@ -40,5 +46,56 @@ public class Application {
     @PreDestroy
     public static void tearDown() {
         // TODO
+    }
+
+    /**
+     * Initializes resources on startup
+     */
+    private static void initializeResources() {
+        initializeDogDBManager();
+        initializeFriendsDBManager();
+        initializeParkDBManager();
+        initializePartyDBManager();
+        initializeUserDBManager();
+    }
+
+    /**
+     * Initializes DogDBManager
+     */
+    private static void initializeDogDBManager() {
+        DogDBManager.dropDogTable();
+        DogDBManager.createDogTable();
+    }
+
+    /**
+     * Initializes UserDBManager
+     */
+    private static void initializeUserDBManager() {
+        UserDBManager.dropUserTable();
+        UserDBManager.createUserTable();
+    }
+
+    /**
+     * Initializes ParkDBManager
+     */
+    private static void initializeParkDBManager() {
+        ParkDBManager.dropParkTable();
+        ParkDBManager.createParkTable();
+    }
+
+    /**
+     * Initializes FriendsDBManager
+     */
+    private static void initializeFriendsDBManager() {
+        FriendsDBManager.dropFriendsTable();
+        FriendsDBManager.createFriendsTable();
+    }
+
+    /**
+     * Initializes PartyDBManager
+     */
+    private static void initializePartyDBManager() {
+        PartyDBManager.dropPartyTable();
+        PartyDBManager.createPartyTable();
     }
 }

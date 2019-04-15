@@ -17,11 +17,10 @@ public class UserDBManager extends DBManager {
     private static String userTable = "users";
     private static Logger logger = LoggerFactory.getLogger(UserDBManager.class);
 
-    UserDBManager() {
-        createUserTable(userTable);
-    }
-
-    private void createUserTable(String userTable) {
+    /**
+     * Creates the user table
+     */
+    public static void createUserTable() {
         String sql = "CREATE TABLE IF NOT EXISTS " + userTable +
                 " (username         TEXT        NOT NULL, " +
                 "password           TEXT        NOT NULL, " +
@@ -29,6 +28,13 @@ public class UserDBManager extends DBManager {
                 "email              TEXT        NOT NULL, " +
                 "age                INT         NOT NULL)";
         executeUpdate(sql);
+    }
+
+    /**
+     * Drops the user table
+     */
+    public static void dropUserTable() {
+        dropTable(userTable);
     }
 
     /**
@@ -100,46 +106,5 @@ public class UserDBManager extends DBManager {
         }
         return null;
     }
-
-    /**
-     * Used to add a pending friend request between two users in the DB
-     *
-     * @param username username of user who sent request
-     * @param friendUsername username of user receiving request
-     */
-    public void addFriendRequest(String username, String friendUsername){
-
-    }
-
-    /**
-     * Used to remove a pending friend request between two users in the DB
-     *
-     * @param username username of user who sent request
-     * @param friendUsername username of user who received request
-     */
-    public void removeFriendRequest(String username, String friendUsername) {
-
-    }
-
-    /**
-     * Used to add a friendship between two users in the DB
-     *
-     * @param username username of user who sent request
-     * @param friendUsername username of new friend
-     */
-    public void addFriend(String username, String friendUsername) {
-
-    }
-
-    /**
-     * Used to remove a friendship between two users in the DB
-     *
-     * @param username username of user who unfriended
-     * @param friendUsername username of user being unfriended
-     */
-    public void removeFriend(String username, String friendUsername) {
-
-    }
-
 }
 

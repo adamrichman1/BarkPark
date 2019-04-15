@@ -1,25 +1,42 @@
 package BarkPark.Dogs;
 
-import BarkPark.Users.User;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class DogParty {
 
-    private User hostUser;
-    private ArrayList<Dog> dogsInParty;
+    private String parkName;
+    private String partyName;
+    private List<String> usersInParty;
 
-    public DogParty(User hostUser, ArrayList<Dog> dogs) {
-        this.hostUser = hostUser;
-        // TODO: Correct this array list implementation.
-        dogsInParty = dogs;
+    public DogParty() {}
+
+    public DogParty(String parkName, String partyName, List<String> usersInParty) {
+        this.parkName = parkName;
+        this.partyName = partyName;
+        this.usersInParty = usersInParty;
     }
 
-    public void addUser(User u) {
-        // TODO
+    public String getParkName() {
+        return parkName;
     }
 
-    public void removeUser (User u) {
-        // TODO
+    public void setParkName(String parkName) {
+        this.parkName = parkName;
+    }
+
+    public String getPartyName() {
+        return partyName;
+    }
+
+    public void setPartyName(String partyName) {
+        this.partyName = partyName;
+    }
+
+    public List<String> getUsersInParty() {
+        return usersInParty;
+    }
+
+    public void setUsersInParty(List<String> usersInParty) {
+        this.usersInParty = usersInParty;
     }
 }

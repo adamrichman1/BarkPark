@@ -16,8 +16,23 @@ public class DogDBManager extends DBManager {
     private static String dogTable = "dogs";
     private static Logger logger = LoggerFactory.getLogger(DogDBManager.class);
 
-    public DogDBManager() {
-        createDogTable(dogTable);
+    /**
+     * Used to create a Dog database table
+     */
+    public static void createDogTable() {
+        String sql = "CREATE TABLE IF NOT EXISTS " + dogTable +
+                " (name         TEXT        NOT NULL, " +
+                "ownerUsername  TEXT        NOT NULL, " +
+                "breed          TEXT        NOT NULL, " +
+                "age            INT         NOT NULL)";
+        executeUpdate(sql);
+    }
+
+    /**
+     * Drops the dog table
+     */
+    public static void dropDogTable() {
+        dropTable(dogTable);
     }
 
     /**
@@ -28,7 +43,7 @@ public class DogDBManager extends DBManager {
      * @param breed the dog's breed
      * @param age the dog's age
      */
-    public void insertDogToDB(String name, String ownerUsername, String breed, String age) {
+    public static void insertDogToDB(String name, String ownerUsername, String breed, int age) {
         String sql = "INSERT INTO " + dogTable + " (name, ownerUsername, breed, age) VALUES (?, ?, ?, ?)";
         executeUpdate(sql, name, ownerUsername, breed, age);
     }
@@ -39,7 +54,7 @@ public class DogDBManager extends DBManager {
      * @param name name of dog to be removed from database
      * @param ownerUsername username of user who owns the dog being removed
      */
-    public void removeDogFromDB(String name, String ownerUsername) {
+    public static void removeDogFromDB(String name, String ownerUsername) {
         String sql = "DELETE FROM " + dogTable + " WHERE name=? AND ownerUsername=?";
         executeUpdate(sql, name, ownerUsername);
     }
@@ -51,7 +66,7 @@ public class DogDBManager extends DBManager {
      * @param ownerUsername the username of the user whose dog is being checked
      * @return true if the dog name exists in the DB, false otherwise
      */
-    public boolean dogExists(String name, String ownerUsername) {
+    public static boolean dogExists(String name, String ownerUsername) {
         String sql = "SELECT COUNT(*) AS count FROM " + dogTable + " WHERE name=? AND ownerUsername=?";
         return deserializeResultSetCol(executeUpdate(sql, name, ownerUsername), "count", int.class) == 1;
     }
@@ -62,7 +77,7 @@ public class DogDBManager extends DBManager {
      * @param name the name of the dog whose profile should be queried for
      * @return a Dog object
      */
-    public Dog getDogProfile(String name, String ownerUsername) {
+    public static Dog getDogProfile(String name, String ownerUsername) {
         String sql = "SELECT * FROM " + dogTable + " WHERE name=? AND ownerUsername=?";
         return populateDog(executeQuery(sql, name, ownerUsername));
     }
@@ -105,7 +120,7 @@ public class DogDBManager extends DBManager {
      * @param rs the ResultSet containing data from the database to populate a Dog object with
      * @return a Dog object with data from the ResultSet
      */
-    private Dog populateDog(ResultSet rs) {
+    private static Dog populateDog(ResultSet rs) {
         try {
             if (rs.next()) {
                 return new Dog(rs.getString("name"), rs.getString("ownerUsername"),
@@ -126,21 +141,8 @@ public class DogDBManager extends DBManager {
      * @param breed the breed of the dog
      * @param age the age of the dog
      */
-    public void updateDogProfile(String name, String ownerUsername, String breed, int age) {
+    public static void updateDogProfile(String name, String ownerUsername, String breed, int age) {
         String sql = "UPDATE " + dogTable + " SET breed=?, age=? WHERE name=? AND ownerUsername=?";
         executeUpdate(sql, breed, age, name, ownerUsername);
-    }
-
-    /**
-     * Used to create a Dog database table
-     *
-     */
-    private void createDogTable(String dogTable) {
-        String sql = "CREATE TABLE IF NOT EXISTS " + dogTable +
-                " (name         TEXT        NOT NULL, " +
-                "ownerUsername  TEXT        NOT NULL, " +
-                "breed          TEXT        NOT NULL, " +
-                "age            TEXT        NOT NULL)";
-        executeUpdate(sql);
     }
 }

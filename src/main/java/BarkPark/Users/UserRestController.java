@@ -1,6 +1,7 @@
 package BarkPark.Users;
 
 import BarkPark.Dogs.Dog;
+import BarkPark.Dogs.DogDBManager;
 import BarkPark.Dogs.DogParty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +42,6 @@ public class UserRestController {
         }
         else {
             logger.info("SUCCESS");
-            // TODO return cookie?
             return new ResponseEntity(HttpStatus.OK);
         }
     }
@@ -102,7 +102,6 @@ public class UserRestController {
             logger.info("Success!");
             dbManager.insertUserToDB(user.getUsername(), user.getPassword(), user.getName(), user.getEmail(),
                     user.getAge());
-            // TODO return cookie
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }
@@ -122,63 +121,33 @@ public class UserRestController {
     }
 
     /**
-     * Used to request a logout from the application
-     *
-     * @param request the HttpRequest entity containing header information
-     * @param user the logout form of the user attempting to logout
-     * @return a ResponseEntity to the user
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/logout", headers = "Accept=application/json")
-    public ResponseEntity logout(HttpServletRequest request, @RequestBody User user) {
-        return null;
-    }
-
-    /**
-     * Used to update user profile (personal information)
-     *
-     * @param request the HttpRequest entity containing header information
-     * @param user the update form of the user attempting to update profile
-     * @return a ResponseEntity to the user
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/updateProfile", headers = "Accept=application/json")
-    public ResponseEntity updateUserProfile(HttpServletRequest request, @RequestBody User user) {
-        return null;
-    }
-
-    /**
      * Used to add a dog to a user's profile
      *
-     * @param request the HttpRequest entity containing header information
      * @param dog the dog to be added to user's profile
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.POST, value = "/addDog", headers = "Accept=application/json")
-    public ResponseEntity addDog(HttpServletRequest request, @RequestBody Dog dog) {
-        return null;
+    public ResponseEntity addDog(@RequestBody Dog dog) {
+        if (DogDBManager.dogExists(dog.getName(), dog.getOwnerUsername())) {
+            return new ResponseEntity<>("Dog already exists: " + dog.getName(), HttpStatus.BAD_REQUEST);
+        }
+        DogDBManager.insertDogToDB(dog.getName(), dog.getOwnerUsername(), dog.getBreed(), dog.getAge());
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
      * Used to remove a dog from a user's profile
      *
-     * @param request the HttpRequest entity containing header information
      * @param dog the dog to be removed from the user's profile
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/removeDog", headers = "Accept=application/json")
-    public ResponseEntity removeDog(HttpServletRequest request, @RequestBody Dog dog) {
-        return null;
-    }
-
-    /**
-     * Used to update a dog's information
-     *
-     * @param request the HttpRequest entity containing header information
-     * @param dog the dog profile to be updated
-     * @return a RepsonseEntity to the user
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/updateDog", headers = "Accept=application/json")
-    public ResponseEntity updateDogProfile(HttpServletRequest request, @RequestBody Dog dog) {
-        return null;
+    public ResponseEntity removeDog(@RequestBody Dog dog) {
+        if (!DogDBManager.dogExists(dog.getName(), dog.getOwnerUsername())) {
+            return new ResponseEntity<>("Dog not found: " + dog.getName(), HttpStatus.BAD_REQUEST);
+        }
+        DogDBManager.removeDogFromDB(dog.getName(), dog.getOwnerUsername());
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
