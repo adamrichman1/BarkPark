@@ -1,21 +1,19 @@
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
-var map;
-
-console.log("YOOOOOOOOOOOO");
+let map;
 
 function initMap() {
     // Create the map.
-    var pittsburgh = {lat: 40.441, lng: -79.995};
+    let pittsburgh = {lat: 40.441, lng: -79.995};
     map = new google.maps.Map(document.getElementById('map'), {
         center: pittsburgh,
         zoom: 13
     });
 
     // Create the places service.
-    var service = new google.maps.places.PlacesService(map);
-    var getNextPage = null;
-    var moreButton = document.getElementById('more');
+    let service = new google.maps.places.PlacesService(map);
+    let getNextPage = null;
+    let moreButton = document.getElementById('more');
     moreButton.onclick = function() {
         moreButton.disabled = true;
         if (getNextPage) getNextPage();
@@ -36,11 +34,11 @@ function initMap() {
 }
 
 function createMarkers(places) {
-    var bounds = new google.maps.LatLngBounds();
-    var placesList = document.getElementById('places');
+    let bounds = new google.maps.LatLngBounds();
+    let placesList = document.getElementById('places');
 
-    for (var i = 0, place; place = places[i]; i++) {
-        var image = {
+    for (let i = 0, place; place = places[i]; i++) {
+        let image = {
             url: place.icon,
             size: new google.maps.Size(71, 71),
             origin: new google.maps.Point(0, 0),
@@ -48,14 +46,14 @@ function createMarkers(places) {
             scaledSize: new google.maps.Size(25, 25)
         };
 
-        var marker = new google.maps.Marker({
+        let marker = new google.maps.Marker({
             map: map,
             icon: image,
             title: place.name,
             position: place.geometry.location
         });
 
-        var li = document.createElement('li');
+        let li = document.createElement('li');
         li.textContent = place.name;
         placesList.appendChild(li);
 
