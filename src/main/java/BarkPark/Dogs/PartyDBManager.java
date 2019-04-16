@@ -51,7 +51,7 @@ public class PartyDBManager extends DBManager {
      * @param ownerUsername the username of the user to check
      * @return true if the owner is in a party, false otherwise
      */
-    public boolean isUserInParty(String parkName, String partyName, String ownerUsername) {
+    public static boolean isUserInParty(String parkName, String partyName, String ownerUsername) {
         String sql = "SELECT COUNT(*) AS count FROM " + partyTable + " WHERE parkName=? AND partyName=? AND ?=ANY(party)";
         return deserializeResultSetCol(executeQuery(sql, parkName, partyName, ownerUsername), "count", int.class) == 1;
     }
@@ -63,7 +63,7 @@ public class PartyDBManager extends DBManager {
      * @param partyName the name of the party to check
      * @return true if a party already exists in the provided park, false otherwise
      */
-    public boolean partyExists(String parkName, String partyName) {
+    public static boolean partyExists(String parkName, String partyName) {
         String sql = "SELECT COUNT(*) AS count FROM " + partyTable + " WHERE parkName=? AND partyName=?";
         return deserializeResultSetCol(executeQuery(sql, parkName, partyName), "count", int.class) == 1;
     }
@@ -74,7 +74,7 @@ public class PartyDBManager extends DBManager {
      * @param parkName the name of the park
      * @param partyName the name of the party
      */
-    public void endParty(String parkName, String partyName) {
+    public static void endParty(String parkName, String partyName) {
         String sql = "DELETE FROM " + partyTable + " WHERE parkName=? AND partyName=?";
         executeUpdate(sql, parkName, partyName);
     }
@@ -86,7 +86,7 @@ public class PartyDBManager extends DBManager {
      * @param partyName the name of the party
      * @param ownerUsername the name of the user to remove from the party
      */
-    public void removeUserFromParty(String parkName, String partyName, String ownerUsername) {
+    public static void removeUserFromParty(String parkName, String partyName, String ownerUsername) {
         String sql = "UPDATE " + partyTable + " SET party=ARRAY_REMOVE(party, ?) WHERE parkName=? AND partyName=?";
         executeUpdate(sql, ownerUsername, parkName, partyName);
     }

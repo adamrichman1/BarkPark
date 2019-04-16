@@ -3,6 +3,7 @@ package BarkPark.Users;
 import BarkPark.Dogs.Dog;
 import BarkPark.Dogs.DogDBManager;
 import BarkPark.Dogs.DogParty;
+import BarkPark.Dogs.PartyDBManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -176,13 +177,16 @@ public class UserRestController {
     /**
      * Used to initiate a dog party
      *
-     * @param request the HttpRequest entity containing header information
      * @param dogParty a DogParty object
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.POST, value = "/startDogParty", headers = "Accept=application/json")
-    public ResponseEntity startDogParty(HttpServletRequest request, @RequestBody DogParty dogParty) {
-        return null;
+    public ResponseEntity startDogParty(@RequestBody DogParty dogParty) {
+        if (PartyDBManager.partyExists(dogParty.getParkName(), dogParty.getPartyName())) {
+            return new ResponseEntity<>("Party with the specified park and name already exist", HttpStatus.BAD_REQUEST);
+        }
+        PartyDBManager.insertToPartyTable(dogParty.getParkName(), dogParty.getPartyName(), dogParty.getPartyHost());
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
