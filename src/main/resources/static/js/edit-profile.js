@@ -3,29 +3,8 @@ window.addEventListener("load",initialize,true);
 
 function initialize(){
     //initial call to gather all of user's dogs
-    sendGetDogsRequest();
+    populateDogList([[${user.dogs}]]);
 
-}
-
-function sendGetDogsRequest() {
-    $.ajax({
-        url: "http://localhost:8080/getDogs",
-        type: 'GET',
-        contentType: "application/json",
-        headers: {
-            'username': localStorage.getItem("username")
-        },
-        success: function(data) {
-            console.log(data);
-            populateDogList(data);
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log(jqXHR.status);
-            console.log(textStatus);
-            console.log(errorThrown);
-            // TODO - ERROR HANDLE
-        }
-    });
 }
 
 function populateDogList(dogs) {
@@ -60,7 +39,8 @@ function populateDogList(dogs) {
             deleteButton.textContent = 'Remove Dog';
             deleteButton.addEventListener('click', function() {
                 const formData = {
-                    "dogName": dogName
+                    "ownerUsername": localStorage.getItem('username'),
+                    "name": dogName
                 };
                 removeDog(formData);
             });
@@ -90,7 +70,10 @@ function removeDog(data) {
         },
         data: JSON.stringify(data),
         success: function() {
-            sendGetDogsRequest();
+            let userDogs = [[${user.dogs}]];
+            userDogs.pop(formData);
+            console.log(userDogs);
+            populateDogList(userDogs);
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR.status);

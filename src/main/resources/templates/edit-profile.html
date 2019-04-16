@@ -11,10 +11,12 @@
 
     <title>Edit Profile</title>
 
-    <script type="text/javascript" th:src="@{/js/edit-profile.js}"></script>
-
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" th:src="@{/js/edit-profile.js}"></script>
 
     <!-- Custom styles for this template -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/edit-profile.css}">
@@ -34,8 +36,8 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="http://localhost:8080/home">Home</a></li>
-                <li><a href="http://localhost:8080/editProfile">Add/Remove Dog</a></li>
+                <li><a href="http://localhost:8080/home">Home</a></li>
+                <li class="active"><a href="http://localhost:8080/editProfile">Add/Remove Dog</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -86,7 +88,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button id="add-dog-button" type="button" class="btn btn-primary">Add Dog</button>
+                        <button id="add-dog-button" type="button" class="btn btn-primary" data-dismiss="modal">Add Dog</button>
                     </div>
                 </div>
             </div>
@@ -102,26 +104,31 @@
 <!--&lt;!&ndash; Bootstrap core JavaScript-->
 <!--================================================== &ndash;&gt;-->
 <!--&lt;!&ndash; Placed at the end of the document so the pages load faster &ndash;&gt;-->
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+<!--<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>-->
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="../../dist/js/bootstrap.min.js"></script>
 
-</body>
 <script>
     let addDogButton = document.getElementById('add-dog-button');
+    let ownerUsername = localStorage.getItem('username');
+    console.log(ownerUsername);
     addDogButton.addEventListener('click', function () {
         const formData = {
             "name": document.getElementById('new-dog-name').value,
+            "ownerUsername": ownerUsername,
             "breed": document.getElementById('new-dog-breed').value,
             "age": document.getElementById('new-dog-age').value
         };
+        console.log(formData);
         $.ajax({
             url: "http://localhost:8080/addDog",
             type: 'POST',
             data: JSON.stringify(formData),
             contentType: "application/json",
             success: function() {
-                sendGetDogsRequest();
+                let userDogs = [[${user.dogs}]];
+                userDogs.push(formData);
+                console.log(userDogs);
+                populateDogList(userDogs);
             },
             error: function(jqXHR, textStatus, errorThrown){
                 console.log(jqXHR.status);
@@ -132,4 +139,5 @@
         });
     });
 </script>
+</body>
 </html>

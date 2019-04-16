@@ -34,8 +34,12 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="http://localhost:8080/home">Home</a></li>
-                <li class="active"><a href="http://localhost:8080/profile">Add/Remove Dog</a></li>
+                <li class="active"><a href="http://localhost:8080/home">Home</a></li>
+                <li><a id="edit-profile-link">Add/Remove Dog</a></li>
+                <script>
+                    let username = localStorage.getItem('username');
+                    document.getElementById('edit-profile-link').setAttribute("href", "http://localhost:8080/editProfile?username=" + username);
+                </script>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
