@@ -81,7 +81,7 @@ public class UserDBManager extends DBManager {
      */
     static User getUserProfile(String username){
         String sql = "SELECT * FROM " + userTable + " WHERE username=?";
-        return populateUser(executeUpdate(sql, username));
+        return populateUser(executeQuery(sql, username));
     }
 
     /**
