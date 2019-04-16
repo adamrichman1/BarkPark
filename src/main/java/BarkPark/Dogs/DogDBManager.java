@@ -68,7 +68,7 @@ public class DogDBManager extends DBManager {
      */
     public static boolean dogExists(String name, String ownerUsername) {
         String sql = "SELECT COUNT(*) AS count FROM " + dogTable + " WHERE name=? AND ownerUsername=?";
-        return deserializeResultSetCol(executeUpdate(sql, name, ownerUsername), "count", int.class) == 1;
+        return deserializeResultSetCol(executeQuery(sql, name, ownerUsername), "count", int.class) == 1;
     }
 
     /**
