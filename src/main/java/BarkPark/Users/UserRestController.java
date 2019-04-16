@@ -266,4 +266,28 @@ public class UserRestController {
         List<String> usernames = FriendsDBManager.getFriends(request.getHeader("username"));
         return new ResponseEntity<>(usernames.stream().map(UserDBManager::getUserProfile), HttpStatus.OK);
     }
+
+    /**
+     * Used to get the edit-profile template
+     *
+     * @param request the HttpRequest entity containing header information
+     * @return a ResponseEntity to the user
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/editProfile", headers = "Accept=application/json")
+    public String getEditProfileTemplate(HttpServletRequest request, Model model) {
+        model.addAttribute("user", UserDBManager.getUserProfile(request.getHeader("username")));
+        return "edit-profile";
+    }
+
+    /**
+     * Used to get another user's profile page
+     *
+     * @param request the HttpRequest entity containing header information
+     * @return a ResponseEntity to the user
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/userProfile", headers = "Accept=application/json")
+    public String getProfilePage(HttpServletRequest request, Model model) {
+        model.addAttribute("user", UserDBManager.getUserProfile(request.getHeader("username")));
+        return "user-profile";
+    }
 }
