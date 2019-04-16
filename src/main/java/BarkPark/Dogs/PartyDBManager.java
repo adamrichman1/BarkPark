@@ -10,7 +10,7 @@ public class PartyDBManager extends DBManager {
                 " (parkName         TEXT        NOT NULL," +
                 " hostName          TEXT        NOT NULL," +
                 " partyName         TEXT        NOT NULL," +
-                " party             TEXT[]      NOT NULL");
+                " party             TEXT[]      NOT NULL)");
     }
 
     /**
