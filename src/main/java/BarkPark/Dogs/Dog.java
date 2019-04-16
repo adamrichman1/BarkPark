@@ -11,6 +11,8 @@ public class Dog {
     private String breed;
     private int age;
 
+    public Dog() {}
+
     Dog(String name, String ownerUsername, String breed, int age) {
         this.name = name;
         this.ownerUsername = ownerUsername;
