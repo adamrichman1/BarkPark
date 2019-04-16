@@ -58,7 +58,7 @@ public class FriendsDBManager extends DBManager {
      * @param username username of user who sent request
      * @param friendUsername username of new friend
      */
-    static void addFriend(String username, String friendUsername) {
+    static void acceptFriendRequest(String username, String friendUsername) {
         String sql = "UPDATE " + friendsTable + " SET accepted=TRUE WHERE user1=? AND user2=?";
         executeUpdate(sql, username, friendUsername);
     }
@@ -66,13 +66,13 @@ public class FriendsDBManager extends DBManager {
     /**
      * Checks if a friend request has already been sent between two users
      *
-     * @param username username of user who sent request
-     * @param friendUsername username of new friend
+     * @param user1 username of user who sent request
+     * @param user2 username of new friend
      * @return true if a friend request exists in the friends table, false otherwise
      */
-    static boolean friendRequestExists(String username, String friendUsername) {
-        String sql = "SELECT COUNT(*) AS count FROM " + friendsTable + " WHERE username IN (?, ?) AND friendUsername IN (?, ?)";
-        return deserializeResultSetCol(executeQuery(sql, username, friendUsername, username, friendUsername),"count", int.class) == 1;
+    static boolean friendRequestExists(String user1, String user2) {
+        String sql = "SELECT COUNT(*) AS count FROM " + friendsTable + " WHERE user1 IN (?, ?) AND user2 IN (?, ?) AND accepted=FALSE";
+        return deserializeResultSetCol(executeQuery(sql, user1, user2, user1, user2),"count", int.class) == 1;
     }
 
     /**
@@ -129,7 +129,15 @@ public class FriendsDBManager extends DBManager {
         return null;
     }
 
-    public static boolean areFriends(String username, String friendUsername) {
-        return true;
+    /**
+     * Checks if two users are friends
+     *
+     * @param user1 the first user being checked
+     * @param user2 the second user being checked
+     * @return true if the two users are friends, false otherwise
+     */
+    static boolean areFriends(String user1, String user2) {
+        String sql = "SELECT COUNT(*) AS count FROM " + friendsTable + " WHERE user1 IN (?, ?) AND user2 IN (?, ?) AND accepted=TRUE";
+        return deserializeResultSetCol(executeQuery(sql, user1, user2, user1, user2),"count", int.class) == 1;
     }
 }

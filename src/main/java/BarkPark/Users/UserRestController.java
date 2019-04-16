@@ -53,7 +53,7 @@ public class UserRestController {
      * @return the home template to the user
      */
     @RequestMapping(method= RequestMethod.GET, value="/home")
-    protected static String getCustomerHome() {
+    public static String getCustomerHome() {
         logger.info("accessed");
         return "home";
     }
@@ -64,7 +64,7 @@ public class UserRestController {
      * @return the login template to the user
      */
     @RequestMapping(method= RequestMethod.GET, value="/login")
-    protected static String getLoginTemplate() {
+    public static String getLoginTemplate() {
         return "login";
     }
 
@@ -74,7 +74,7 @@ public class UserRestController {
      * @return the sign-up template to the user
      */
     @RequestMapping(method= RequestMethod.GET, value="/signup")
-    protected String getSignupTemplate() {
+    public String getSignupTemplate() {
         return "signup";
     }
 
@@ -198,17 +198,17 @@ public class UserRestController {
     }
 
     /**
-     * Used to add a friend
+     * Used to accept a friend request
      *
      * @param request the HttpRequest entity containing header information
      * @return a ResponseEntity to the user
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/addFriend", headers = "Accept=application/json")
-    public ResponseEntity addFriend(HttpServletRequest request) {
+    @RequestMapping(method = RequestMethod.POST, value = "/acceptFriendRequest", headers = "Accept=application/json")
+    public ResponseEntity acceptFriendRequest(HttpServletRequest request) {
         if (!FriendsDBManager.friendRequestExists(request.getHeader("username"), request.getHeader("friendUsername"))) {
             return new ResponseEntity<>("No pending friend request exists", HttpStatus.BAD_REQUEST);
         }
-        FriendsDBManager.addFriend(request.getHeader("username"), request.getHeader("friendUsername"));
+        FriendsDBManager.acceptFriendRequest(request.getHeader("username"), request.getHeader("friendUsername"));
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -243,17 +243,6 @@ public class UserRestController {
     }
 
     /**
-     * Used to accept a friend request from another user
-     *
-     * @param request the HttpRequest entity containing header information
-     * @return a ResponseEntity to the user
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/acceptFriendRequest", headers = "Accept=application/json")
-    public ResponseEntity acceptFriendRequest(HttpServletRequest request) {
-        return null;
-    }
-
-    /**
      * Used to reject a friend request from another user
      *
      * @param request the HttpRequest entity containing header information
@@ -261,7 +250,11 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/rejectFriendRequest", headers = "Accept=application/json")
     public ResponseEntity rejectFriendRequest(HttpServletRequest request) {
-        return null;
+        if (!FriendsDBManager.friendRequestExists(request.getHeader("username"), request.getHeader("friendUsername"))) {
+            return new ResponseEntity<>("No pending friend request exists", HttpStatus.BAD_REQUEST);
+        }
+        FriendsDBManager.removeFriend(request.getHeader("username"), request.getHeader("friendUsername"));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
