@@ -90,7 +90,7 @@ public class UserDBManager extends DBManager {
      * @param rs the ResultSet object containing data for a user from a DB query
      * @return a User object
      */
-    private User populateUser(ResultSet rs) {
+    private static User populateUser(ResultSet rs) {
         try {
             if (rs.next()) {
                 User u = new User(rs.getString("username"));
