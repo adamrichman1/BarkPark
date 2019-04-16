@@ -1,9 +1,6 @@
 package BarkPark.Users;
 
-import BarkPark.Dogs.Dog;
-import BarkPark.Dogs.DogDBManager;
-import BarkPark.Dogs.DogParty;
-import BarkPark.Dogs.PartyDBManager;
+import BarkPark.Dogs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -160,7 +157,11 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/goToPark", headers = "Accept=application/json")
     public ResponseEntity goToPark(HttpServletRequest request) {
-        return null;
+        if (ParkDBManager.isOwnerInPark(request.getHeader("parkName"), request.getHeader("username"))) {
+            return new ResponseEntity<>("User already in park", HttpStatus.BAD_REQUEST);
+        }
+        ParkDBManager.addOwnerToPark(request.getHeader("parkName"), request.getHeader("username"));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -171,7 +172,11 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/leavePark", headers = "Accept=application/json")
     public ResponseEntity leavePark(HttpServletRequest request) {
-        return null;
+        if (!ParkDBManager.isOwnerInPark(request.getHeader("parkName"), request.getHeader("username"))) {
+            return new ResponseEntity<>("User not in park", HttpStatus.BAD_REQUEST);
+        }
+        ParkDBManager.deleteUserFromPark(request.getHeader("parkName"), request.getHeader("username"));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -193,12 +198,15 @@ public class UserRestController {
      * Used to end a dog party
      *
      * @param request the HttpRequest entity containing header information
-     * @param dogParty a DogParty object
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/endDogParty", headers = "Accept=application/json")
-    public ResponseEntity endDogParty(HttpServletRequest request, @RequestBody DogParty dogParty) {
-        return null;
+    public ResponseEntity endDogParty(HttpServletRequest request) {
+        if (!PartyDBManager.partyExists(request.getHeader("parkName"), request.getHeader("partyName"))) {
+            return new ResponseEntity<>("Party does not exist", HttpStatus.BAD_REQUEST);
+        }
+        PartyDBManager.endParty(request.getHeader("parkName"), request.getHeader("partyName"));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**

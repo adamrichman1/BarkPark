@@ -5,6 +5,9 @@ import BarkPark.Core.DBManager;
 public class PartyDBManager extends DBManager {
     private static String partyTable = "parties";
 
+    /**
+     * Creates the party table
+     */
     public static void createPartyTable() {
         executeUpdate("CREATE TABLE IF NOT EXISTS " + partyTable +
                 " (parkName         TEXT        NOT NULL," +
