@@ -1,8 +1,16 @@
 package BarkPark.Users;
 
 import BarkPark.Core.DBManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FriendsDBManager extends DBManager {
+    private static Logger logger = LoggerFactory.getLogger(FriendsDBManager.class);
     private static String friendsTable = "friends";
 
     /**
@@ -65,5 +73,59 @@ public class FriendsDBManager extends DBManager {
     public static boolean friendRequestExists(String username, String friendUsername) {
         String sql = "SELECT COUNT(*) AS count FROM " + friendsTable + " WHERE username IN (?, ?) AND friendUsername IN (?, ?)";
         return deserializeResultSetCol(executeQuery(sql, username, friendUsername, username, friendUsername),"count", int.class) == 1;
+    }
+
+    /**
+     * Finds all usernames of friends for a user
+     *
+     * @param username the name of the username to find friends for
+     * @return a list of usernames that are friends of a user
+     */
+    static List<String> getFriends(String username) {
+        List<String> friends = findFriendsOfUser1(username);
+        friends.addAll(findFriendsOfUser2(username));
+        return friends;
+    }
+
+    /**
+     * Finds a list of usernames who are friends with the specified user
+     *
+     * @param user1 the username of the user stored in the user1 col of the friends table
+     * @return a list of usernames
+     */
+    private static List<String> findFriendsOfUser1(String user1) {
+        String sql = "SELECT user2 AS user FROM " + friendsTable + " WHERE user1=? AND accepted=TRUE";
+        return populateUsernameList(executeQuery(sql, user1));
+    }
+
+    /**
+     * Finds a list of usernames who are friends with the specified user
+     *
+     * @param user2 the username of the user stored in the user2 col of the friends table
+     * @return a list of usernames
+     */
+    private static List<String> findFriendsOfUser2(String user2) {
+        String sql = "SELECT user1 AS user FROM " + friendsTable + " WHERE user2=? AND accepted=TRUE";
+        return populateUsernameList(executeQuery(sql, user2));
+    }
+
+    /**
+     * Populates a list of usernames from a ResultSet object
+     *
+     * @param rs the ResultSet from the DB query
+     * @return a list of usernames
+     */
+    private static List<String> populateUsernameList(ResultSet rs) {
+        try {
+            List<String> usernames = new ArrayList<>();
+            while (rs.next()) {
+                usernames.add(rs.getString("user"));
+            }
+            return usernames;
+        } catch(SQLException e) {
+            logger.error(">>> ERROR: Couldn't populate username list", e);
+            System.exit(1);
+        }
+        return null;
     }
 }

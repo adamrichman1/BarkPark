@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * This class contains abstract methods that represent required endpoints to be implemented for Users.
@@ -252,5 +253,17 @@ public class UserRestController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/rejectFriendRequest", headers = "Accept=application/json")
     public ResponseEntity rejectFriendRequest(HttpServletRequest request) {
         return null;
+    }
+
+    /**
+     * Used to get all friends of a user
+     *
+     * @param request the HttpRequest entity containing header information
+     * @return a ResponseEntity to the user
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/getFriends", headers = "Accept=application/json")
+    public ResponseEntity getFriends(HttpServletRequest request) {
+        List<String> usernames = FriendsDBManager.getFriends(request.getHeader("username"));
+        return new ResponseEntity<>(usernames.stream().map(UserDBManager::getUserProfile), HttpStatus.OK);
     }
 }

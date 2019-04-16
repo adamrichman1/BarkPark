@@ -79,7 +79,7 @@ public class UserDBManager extends DBManager {
      * @param username the username of the user whose profile should be queried for
      * @return a User object containing the user's profile
      */
-    public User getUserProfile(String username){
+    public static User getUserProfile(String username){
         String sql = "SELECT * FROM " + userTable + " WHERE username=?";
         return populateUser(executeUpdate(sql, username));
     }
