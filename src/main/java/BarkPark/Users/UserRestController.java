@@ -201,36 +201,45 @@ public class UserRestController {
      * Used to add a friend
      *
      * @param request the HttpRequest entity containing header information
-     * @param user the user to add as a friend
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.POST, value = "/addFriend", headers = "Accept=application/json")
-    public ResponseEntity addFriend(HttpServletRequest request, @RequestBody User user) {
-        return null;
+    public ResponseEntity addFriend(HttpServletRequest request) {
+        if (!FriendsDBManager.friendRequestExists(request.getHeader("username"), request.getHeader("friendUsername"))) {
+            return new ResponseEntity<>("No pending friend request exists", HttpStatus.BAD_REQUEST);
+        }
+        FriendsDBManager.addFriend(request.getHeader("username"), request.getHeader("friendUsername"));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
      * Used to remove a friend
      *
      * @param request the HttpRequest entity containing header information
-     * @param user the user to be removed from friend list
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/removeFriend", headers = "Accept=application/json")
-    public ResponseEntity removeFriend(HttpServletRequest request, @RequestBody User user) {
-        return null;
+    public ResponseEntity removeFriend(HttpServletRequest request) {
+        if (!FriendsDBManager.areFriends(request.getHeader("username"), request.getHeader("friendUsername"))) {
+            return new ResponseEntity<>("Users aren't friends", HttpStatus.BAD_REQUEST);
+        }
+        FriendsDBManager.removeFriend(request.getHeader("username"), request.getHeader("friendUsername"));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
      * Used to send a friend request to another user
      *
      * @param request the HttpRequest entity containing header information
-     * @param user user to send request to
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.POST, value = "/sendFriendRequest", headers = "Accept=application/json")
-    public ResponseEntity sendFriendRequest(HttpServletRequest request, @RequestBody User user) {
-        return null;
+    public ResponseEntity sendFriendRequest(HttpServletRequest request) {
+        if (FriendsDBManager.friendRequestExists(request.getHeader("username"), request.getHeader("friendUsername"))) {
+            return new ResponseEntity<>("Friend request already exists between the two users", HttpStatus.BAD_REQUEST);
+        }
+        FriendsDBManager.addFriendRequest(request.getHeader("username"), request.getHeader("friendUsername"));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -270,12 +279,12 @@ public class UserRestController {
     /**
      * Used to get the edit-profile template
      *
-     * @param request the HttpRequest entity containing header information
+     * @param model the model to populate the template with
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.GET, value = "/editProfile", headers = "Accept=application/json")
-    public String getEditProfileTemplate(HttpServletRequest request, Model model) {
-        model.addAttribute("user", UserDBManager.getUserProfile(request.getHeader("username")));
+    public String getEditProfileTemplate(@RequestParam("username") String username, Model model) {
+        model.addAttribute("user", UserDBManager.getUserProfile(username));
         return "edit-profile";
     }
 
@@ -283,6 +292,7 @@ public class UserRestController {
      * Used to get another user's profile page
      *
      * @param request the HttpRequest entity containing header information
+     * @param model the model to populate the template with
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.GET, value = "/userProfile", headers = "Accept=application/json")
