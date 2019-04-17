@@ -21,6 +21,7 @@ public class UserRestController {
 
     private static Logger logger = LoggerFactory.getLogger(UserRestController.class);
     private static UserDBManager dbManager = new UserDBManager();
+    private static DogDBManager dogDBManager = DogDBManager.getInstance();
 
     /**
      * Used to request a login to the application
@@ -127,10 +128,10 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/addDog", headers = "Accept=application/json")
     public ResponseEntity addDog(@RequestBody Dog dog) {
-        if (DogDBManager.dogExists(dog.getName(), dog.getOwnerUsername())) {
+        if (dogDBManager.dogExists(dog.getName(), dog.getOwnerUsername())) {
             return new ResponseEntity<>("Dog already exists: " + dog.getName(), HttpStatus.BAD_REQUEST);
         }
-        DogDBManager.insertDogToDB(dog.getName(), dog.getOwnerUsername(), dog.getBreed(), dog.getAge());
+        dogDBManager.insertDogToDB(dog.getName(), dog.getOwnerUsername(), dog.getBreed(), dog.getAge());
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -142,10 +143,10 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/removeDog", headers = "Accept=application/json")
     public ResponseEntity removeDog(@RequestBody Dog dog) {
-        if (!DogDBManager.dogExists(dog.getName(), dog.getOwnerUsername())) {
+        if (!dogDBManager.dogExists(dog.getName(), dog.getOwnerUsername())) {
             return new ResponseEntity<>("Dog not found: " + dog.getName(), HttpStatus.BAD_REQUEST);
         }
-        DogDBManager.removeDogFromDB(dog.getName(), dog.getOwnerUsername());
+        dogDBManager.removeDogFromDB(dog.getName(), dog.getOwnerUsername());
         return new ResponseEntity(HttpStatus.OK);
     }
 

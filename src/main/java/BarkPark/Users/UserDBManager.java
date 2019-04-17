@@ -97,7 +97,7 @@ public class UserDBManager extends DBManager {
                 u.setName(rs.getString("name"));
                 u.setAge(rs.getInt("age"));
                 u.setEmail(rs.getString("email"));
-                u.setDogs(DogDBManager.getUserDogs(u.getUsername()));
+                u.setDogs(DogDBManager.getInstance().getUserDogs(u.getUsername()));
                 return u;
             }
         } catch (SQLException e) {

@@ -13,8 +13,23 @@ import java.util.ArrayList;
  */
 public class DogDBManager extends DBManager {
 
+    private static DogDBManager dogDBManager;
     private static String dogTable = "dogs";
     private static Logger logger = LoggerFactory.getLogger(DogDBManager.class);
+
+    private DogDBManager() {}
+
+    /**
+     * Singleton design pattern
+     *
+     * @return the sole instance of DogDBManager
+     */
+    public static DogDBManager getInstance() {
+        if (dogDBManager == null) {
+            dogDBManager = new DogDBManager();
+        }
+        return dogDBManager;
+    }
 
     /**
      * Used to create a Dog database table
@@ -43,7 +58,7 @@ public class DogDBManager extends DBManager {
      * @param breed the dog's breed
      * @param age the dog's age
      */
-    public static void insertDogToDB(String name, String ownerUsername, String breed, int age) {
+    public void insertDogToDB(String name, String ownerUsername, String breed, int age) {
         String sql = "INSERT INTO " + dogTable + " (name, ownerUsername, breed, age) VALUES (?, ?, ?, ?)";
         executeUpdate(sql, name, ownerUsername, breed, age);
     }
@@ -54,7 +69,7 @@ public class DogDBManager extends DBManager {
      * @param name name of dog to be removed from database
      * @param ownerUsername username of user who owns the dog being removed
      */
-    public static void removeDogFromDB(String name, String ownerUsername) {
+    public void removeDogFromDB(String name, String ownerUsername) {
         String sql = "DELETE FROM " + dogTable + " WHERE name=? AND ownerUsername=?";
         executeUpdate(sql, name, ownerUsername);
     }
@@ -66,7 +81,7 @@ public class DogDBManager extends DBManager {
      * @param ownerUsername the username of the user whose dog is being checked
      * @return true if the dog name exists in the DB, false otherwise
      */
-    public static boolean dogExists(String name, String ownerUsername) {
+    public boolean dogExists(String name, String ownerUsername) {
         String sql = "SELECT COUNT(*) AS count FROM " + dogTable + " WHERE name=? AND ownerUsername=?";
         return deserializeResultSetCol(executeQuery(sql, name, ownerUsername), "count", int.class) == 1;
     }
@@ -77,7 +92,7 @@ public class DogDBManager extends DBManager {
      * @param name the name of the dog whose profile should be queried for
      * @return a Dog object
      */
-    public static Dog getDogProfile(String name, String ownerUsername) {
+    public Dog getDogProfile(String name, String ownerUsername) {
         String sql = "SELECT * FROM " + dogTable + " WHERE name=? AND ownerUsername=?";
         return populateDog(executeQuery(sql, name, ownerUsername));
     }
@@ -88,7 +103,7 @@ public class DogDBManager extends DBManager {
      * @param ownerUsername the username of the owner to query for
      * @return an ArrayList of the user's dogs
      */
-    public static ArrayList<Dog> getUserDogs(String ownerUsername) {
+    public ArrayList<Dog> getUserDogs(String ownerUsername) {
         String sql = "SELECT * FROM " + dogTable + " WHERE ownerUsername=?";
         return populateDogList(executeQuery(sql, ownerUsername));
     }
@@ -99,7 +114,7 @@ public class DogDBManager extends DBManager {
      * @param rs the ResultSet containing data from the database to populate a Dog object with
      * @return a list of dogs from a ResultSet
      */
-    private static ArrayList<Dog> populateDogList(ResultSet rs) {
+    private ArrayList<Dog> populateDogList(ResultSet rs) {
         try {
             ArrayList<Dog> dogs = new ArrayList<>();
             while (rs.next()) {
@@ -120,7 +135,7 @@ public class DogDBManager extends DBManager {
      * @param rs the ResultSet containing data from the database to populate a Dog object with
      * @return a Dog object with data from the ResultSet
      */
-    private static Dog populateDog(ResultSet rs) {
+    private Dog populateDog(ResultSet rs) {
         try {
             if (rs.next()) {
                 return new Dog(rs.getString("name"), rs.getString("ownerUsername"),
@@ -141,7 +156,7 @@ public class DogDBManager extends DBManager {
      * @param breed the breed of the dog
      * @param age the age of the dog
      */
-    public static void updateDogProfile(String name, String ownerUsername, String breed, int age) {
+    public void updateDogProfile(String name, String ownerUsername, String breed, int age) {
         String sql = "UPDATE " + dogTable + " SET breed=?, age=? WHERE name=? AND ownerUsername=?";
         executeUpdate(sql, breed, age, name, ownerUsername);
     }
