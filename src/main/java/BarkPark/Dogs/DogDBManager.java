@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * This class contains database/query functionality specific to FixIT customers
+ * This class contains database/query functionality specific to dogs
  */
 public class DogDBManager extends DBManager {
 
