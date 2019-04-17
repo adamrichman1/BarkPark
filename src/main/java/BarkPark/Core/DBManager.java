@@ -96,7 +96,7 @@ public abstract class DBManager {
     /**
      * Used to convert a ResultSet object into a specific class
      *
-     * @param rs the ResultSet object containing match data from the query
+     * @param rs the ResultSet object containing data from the query
      * @param id the id of the column to extract from the ResultSet
      * @param c the Class to convert the ResultSet column to
      * @return an array of Team objects containing team data from the query
@@ -114,6 +114,25 @@ public abstract class DBManager {
     }
 
     /**
+     * Parses a String array from a ResultSet object following a DB query
+     *
+     * @param rs the ResultSet object to parse
+     * @return an array of String objects
+     */
+    protected static String[] deserializeStringArray(ResultSet rs, String id) {
+        try {
+            if (rs.next()) {
+                String toParse = rs.getString(id);
+                return toParse.replace("{", "").replace("}", "").split(",");
+            }
+        } catch (SQLException e) {
+            logger.error(">>> ERROR: Couldn't extract ResultSet column " + id, e);
+            System.exit(1);
+        }
+        return null;
+    }
+
+    /**
      * Used to deserialize an object
      *
      * @param data the data to deserialize
@@ -121,7 +140,7 @@ public abstract class DBManager {
      * @param <S> the generic type that the data will be deserialized into
      * @return the deserialized form of the data provided
      */
-    protected static <S> S deserializeString(String data, Class<S> c) {
+    private static <S> S deserializeString(String data, Class<S> c) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(data, c);

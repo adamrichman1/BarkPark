@@ -11,6 +11,9 @@ public class DogDBManagerTest {
 
     private DogDBManager dogDBManager;
 
+    /**
+     * Setup operations
+     */
     @Before
     public void setup() {
         DogDBManager.dropDogTable();

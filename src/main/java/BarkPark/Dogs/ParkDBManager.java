@@ -39,7 +39,7 @@ public class ParkDBManager extends DBManager {
      * @param ownerUsername the username of the owner being removed from the park entry
      */
     public static void deleteUserFromPark(String parkName, String ownerUsername) {
-        String sql = "UPDATE " + parkTable + " SET ownerUsernames = ARRAY_REMOVE(ownerUsernames, ?) WHERE parkName=?";
+        String sql = "UPDATE " + parkTable + " SET ownerUsernames = ARRAY_REMOVE(ownerUsernames, ?::text) WHERE parkName=?";
         executeUpdate(sql, ownerUsername, parkName);
     }
 
@@ -61,8 +61,8 @@ public class ParkDBManager extends DBManager {
      * @param ownerUsername the name of the owner being added to the park
      */
     public static void addOwnerToPark(String parkName, String ownerUsername) {
-        String sql = "UPDATE " + parkTable + " SET ownerUsernames=ownerUsernames || {?} WHERE parkName=?";
-        executeUpdate(sql, ownerUsername, parkName);
+        String sql = "UPDATE " + parkTable + " SET ownerUsernames=ownerUsernames || ?::TEXT[] WHERE parkName=?";
+        executeUpdate(sql, new String[] {ownerUsername}, parkName);
     }
 
     /**
@@ -85,6 +85,6 @@ public class ParkDBManager extends DBManager {
      */
     public static String[] getOwnersInPark(String parkName) {
         String sql = "SELECT ownerUsernames FROM " + parkTable + " WHERE parkName=?";
-        return deserializeResultSetCol(executeQuery(sql, parkName), "ownerUsernames", String[].class);
+        return deserializeStringArray(executeQuery(sql, parkName), "ownerUsernames");
     }
 }
