@@ -47,7 +47,7 @@
         <h1>My Profile</h1>
         <p class="lead" th:text="'Name: ' + ${user.name}"></p>
         <p class="lead" th:text="'Email: ' + ${user.email}"></p>
-        <p id="dog-list-header" class="lead"></p>
+        <h4 id="dog-list-header" class="lead"></h4>
 
         <ul id="dog-list" class="list-group"></ul>
 
@@ -169,7 +169,7 @@
 
                 let deleteButton = document.createElement('button');
                 deleteButton.id = "remove-dog-button";
-                deleteButton.class = "btn btn-danger";
+                deleteButton.className = "btn btn-danger";
                 deleteButton.textContent = 'Remove Dog';
                 deleteButton.addEventListener('click', function() {
                     const formData = {
