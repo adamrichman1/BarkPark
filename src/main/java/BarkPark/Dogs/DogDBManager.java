@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains database/query functionality specific to dogs
@@ -58,9 +59,9 @@ public class DogDBManager extends DBManager {
      * @param breed the dog's breed
      * @param age the dog's age
      */
-    public void insertDogToDB(String name, String ownerUsername, String breed, int age) {
-        String sql = "INSERT INTO " + dogTable + " (name, ownerUsername, breed, age) VALUES (?, ?, ?, ?)";
-        executeUpdate(sql, name, ownerUsername, breed, age);
+    public Dog insertDogToDB(String name, String ownerUsername, String breed, int age) {
+        String sql = "INSERT INTO " + dogTable + " (name, ownerUsername, breed, age) VALUES (?, ?, ?, ?) RETURNING *";
+        return populateDog(executeUpdate(sql, name, ownerUsername, breed, age));
     }
 
     /**
@@ -92,7 +93,7 @@ public class DogDBManager extends DBManager {
      * @param name the name of the dog whose profile should be queried for
      * @return a Dog object
      */
-    public Dog getDogProfile(String name, String ownerUsername) {
+    Dog getDogProfile(String name, String ownerUsername) {
         String sql = "SELECT * FROM " + dogTable + " WHERE name=? AND ownerUsername=?";
         return populateDog(executeQuery(sql, name, ownerUsername));
     }
@@ -104,7 +105,7 @@ public class DogDBManager extends DBManager {
      * @return an ArrayList of the user's dogs
      */
     public ArrayList<Dog> getUserDogs(String ownerUsername) {
-        String sql = "SELECT * FROM " + dogTable + " WHERE ownerUsername=?";
+        String sql = "SELECT * FROM " + dogTable + " WHERE ownerUsername=? ORDER BY age";
         return populateDogList(executeQuery(sql, ownerUsername));
     }
 
@@ -156,8 +157,18 @@ public class DogDBManager extends DBManager {
      * @param breed the breed of the dog
      * @param age the age of the dog
      */
-    public void updateDogProfile(String name, String ownerUsername, String breed, int age) {
+    void updateDogProfile(String name, String ownerUsername, String breed, int age) {
         String sql = "UPDATE " + dogTable + " SET breed=?, age=? WHERE name=? AND ownerUsername=?";
         executeUpdate(sql, breed, age, name, ownerUsername);
+    }
+
+    /**
+     * Finds all dogs in the DB
+     *
+     * @return a list of all dogs in the DB
+     */
+    List<Dog> getAllDogs() {
+        String sql = "SELECT * FROM " + dogTable + " ORDER BY age";
+        return populateDogList(executeQuery(sql));
     }
 }

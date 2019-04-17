@@ -1,5 +1,6 @@
 package BarkPark;
 
+import BarkPark.Dogs.DogAgeTracker;
 import BarkPark.Dogs.DogDBManager;
 import BarkPark.Dogs.ParkDBManager;
 import BarkPark.Dogs.PartyDBManager;
@@ -26,6 +27,7 @@ import java.io.IOException;
 @Controller
 public class Application {
     private static Logger logger = LoggerFactory.getLogger(Application.class);
+    private static Thread dogAgeTracker;
 
     /**
      * This method is used on startup and is called implicitly by Spring Boot
@@ -48,7 +50,9 @@ public class Application {
      */
     @PreDestroy
     public static void tearDown() {
-        // TODO
+        DogAgeTracker.kill();
+        dogAgeTracker.interrupt();
+        logger.info("------------ BarkPark Shutdown Successfully ------------");
     }
 
     /**
@@ -60,6 +64,7 @@ public class Application {
         initializeParkDBManager();
         initializePartyDBManager();
         initializeUserDBManager();
+        initializeDogAgeTracker();
     }
 
     /**
@@ -100,6 +105,13 @@ public class Application {
     private static void initializePartyDBManager() {
         PartyDBManager.dropPartyTable();
         PartyDBManager.createPartyTable();
+    }
+
+    /**
+     * Initializes a DogAgeTracker
+     */
+    private static void initializeDogAgeTracker() {
+        (dogAgeTracker = new DogAgeTracker()).start();
     }
 
     /**
