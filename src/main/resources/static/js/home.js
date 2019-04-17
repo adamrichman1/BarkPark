@@ -4,9 +4,9 @@ let map;
 
 function initMap() {
     // Create the map.
-    let pittsburgh = {lat: 40.441, lng: -79.995};
+    let schenleyPark = {lat: 40.4348, lng: -79.9425};
     map = new google.maps.Map(document.getElementById('map'), {
-        center: pittsburgh,
+        center: schenleyPark,
         zoom: 13
     });
 
@@ -21,7 +21,7 @@ function initMap() {
 
     // Perform a nearby search.
     service.nearbySearch(
-        {location: pittsburgh, radius: 500, type: ['park']},
+        {location: schenleyPark, radius: 500, type: ['park']},
         function(results, status, pagination) {
             if (status !== 'OK') return;
 
