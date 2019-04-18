@@ -37,7 +37,15 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="http://localhost:8080/home">Home</a></li>
-                <li><a href="http://localhost:8080/editProfile">Add/Remove Dog</a></li>
+                <li><a href="http://localhost:8080/editProfile">My Profile</a></li>
+                <li><a id="friend-request-link">Friend Requests</a></li>
+                <li><a id="friends-link">Friends</a></li>
+                <script>
+                    let username = sessionStorage.getItem('username');
+                    document.getElementById('edit-profile-link').setAttribute("href", "http://localhost:8080/editProfile?username=" + username);
+                    document.getElementById('friend-request-link').setAttribute("href", "http://localhost:8080/friendRequests?username=" + username);
+                    document.getElementById('friends-link').setAttribute("href", "http://localhost:8080/friends?username=" + username);
+                </script>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
