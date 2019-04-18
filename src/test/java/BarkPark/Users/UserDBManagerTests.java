@@ -3,6 +3,8 @@ package BarkPark.Users;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class UserDBManagerTests {
@@ -95,5 +97,24 @@ public class UserDBManagerTests {
         assertEquals("adam", u.getName());
         assertEquals("adam@gmail.com", u.getEmail());
         assertEquals(5, u.getAge());
+    }
+
+    /**
+     * Tests findFriendsByName()
+     */
+    @Test
+    public void testFindFriendsByName() {
+        // Insert user
+        UserDBManager.insertUserToDB("a", "pass", "adamrichman", "adam@gmail.com", 5);
+        UserDBManager.insertUserToDB("b", "pass", "richmanadam", "adam@gmail.com", 5);
+        UserDBManager.insertUserToDB("c", "pass", "joshadam", "adam@gmail.com", 5);
+        UserDBManager.insertUserToDB("d", "pass", "adarichman", "adam@gmail.com", 5);
+        UserDBManager.insertUserToDB("e", "pass", "georgejosh", "adam@gmail.com", 5);
+
+        List<String> usernames = UserDBManager.findFriendsByName("adam");
+        assertEquals(3, usernames.size());
+        assertTrue(usernames.contains("a"));
+        assertTrue(usernames.contains("b"));
+        assertTrue(usernames.contains("c"));
     }
 }

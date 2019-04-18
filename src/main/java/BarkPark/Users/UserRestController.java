@@ -294,6 +294,18 @@ public class UserRestController {
     }
 
     /**
+     * Used to find users by name
+     *
+     * @param request the HttpRequest entity containing header information
+     * @return a ResponseEntity to the user
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/findFriendsByName", headers = "Accept=application/json")
+    public ResponseEntity findFriendsByName(HttpServletRequest request) {
+        List<String> usernames = UserDBManager.findFriendsByName(request.getHeader("name"));
+        return new ResponseEntity<>(usernames.stream().map(UserDBManager::getUserProfile), HttpStatus.OK);
+    }
+
+    /**
      * Used to get the edit-profile template
      *
      * @param model the model to populate the template with

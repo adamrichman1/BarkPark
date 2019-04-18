@@ -61,3 +61,23 @@ function createMarkers(places) {
     }
     map.fitBounds(bounds);
 }
+
+function searchFriendsByName(name) {
+    $.ajax({
+        url: "http://localhost:8080/sendFriendRequest",
+        type: 'POST',
+        headers: {
+            "name": name
+        },
+        contentType: "application/json",
+        success: function() {
+            changeButtonToPending();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR.status);
+            console.log(textStatus);
+            console.log(errorThrown);
+            // TODO - ERROR HANDLE
+        }
+    });
+}

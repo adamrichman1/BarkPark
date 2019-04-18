@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains query functionality that is general to users of the BarkPark application.
@@ -82,6 +84,36 @@ public class UserDBManager extends DBManager {
     static User getUserProfile(String username){
         String sql = "SELECT * FROM " + userTable + " WHERE username=?";
         return populateUser(executeQuery(sql, username));
+    }
+
+    /**
+     * Searches for friends by name
+     *
+     * @param name the name of the user to search by
+     * @return a list of all possible usernames mapping to the name provided
+     */
+    static List<String> findFriendsByName(String name) {
+        String sql = "SELECT username FROM " + userTable + " WHERE name LIKE ?";
+        return populateUserList(executeQuery(sql, "%" + name + "%"));
+    }
+
+    /**
+     * Populates a list of usernames following a DB query
+     *
+     * @param rs the ResultSet object containing data for a user from a DB query
+     * @return a list of usernames
+     */
+    private static List<String> populateUserList(ResultSet rs) {
+        List<String> usernames = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                usernames.add(rs.getString("username"));
+            }
+        } catch (SQLException e) {
+            logger.error(">>> ERROR: Couldn't populate User object", e);
+            System.exit(1);
+        }
+        return usernames;
     }
 
     /**
