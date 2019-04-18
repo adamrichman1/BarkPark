@@ -1,33 +1,3 @@
-window.addEventListener("load",initialize,true);
-
-
-function initialize(){
-    //initial call to gather all of user's dogs
-    sendGetDogsRequest();
-
-}
-
-function sendGetDogsRequest() {
-    $.ajax({
-        url: "http://localhost:8080/getDogs",
-        type: 'GET',
-        contentType: "application/json",
-        headers: {
-            'username': document.getElementById('profile-username').value
-        },
-        success: function(data) {
-            console.log(data);
-            populateDogList(data);
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log(jqXHR.status);
-            console.log(textStatus);
-            console.log(errorThrown);
-            // TODO - ERROR HANDLE
-        }
-    });
-}
-
 function populateDogList(dogs) {
     if (dogs.length !== 0) {
         let dogListHeader = document.getElementById('dog-list-header');
