@@ -45,10 +45,35 @@ function populateRequestList(requests) {
                 });
             });
 
+            let rejectFriendButton = document.createElement('button');
+            rejectFriendButton.type = 'button';
+            rejectFriendButton.className = 'btn btn-danger';
+            rejectFriendButton.innerText = 'Reject Friend Request';
+            rejectFriendButton.addEventListener('click', function() {
+                $.ajax({
+                    url: "http://localhost:8080/rejectFriendRequest",
+                    type: 'DELETE',
+                    headers: {
+                        "username": sessionStorage.getItem('username'),
+                        "friendUsername": requests[i].username
+                    },
+                    contentType: "application/json",
+                    success: function() {
+                        window.location = "http://localhost:8080/friends?username=" + sessionStorage.getItem('username');
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                        // TODO - ERROR HANDLE
+                    }
+                });
+            });
 
             userData.append(nameElement);
             userData.append(usernameElement);
             userData.append(addFriendButton);
+            userData.append(rejectFriendButton);
             listItem.appendChild(userData);
             requestList.appendChild(listItem);
         }
