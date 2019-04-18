@@ -19,17 +19,17 @@ function populateSearchResults(searchResults) {
             usernameElement.className = 'small';
             usernameElement.innerText = "Username: " + searchResults[i].username;
 
-            let addFriendButton = document.createElement('button');
-            addFriendButton.type = 'button';
-            addFriendButton.className = 'btn btn-success';
-            addFriendButton.innerText = 'Visit Profile';
-            addFriendButton.addEventListener('click', function() {
+            let visitProfileButton = document.createElement('button');
+            visitProfileButton.type = 'button';
+            visitProfileButton.className = 'btn btn-success';
+            visitProfileButton.innerText = 'Visit Profile';
+            visitProfileButton.addEventListener('click', function() {
                 window.location = "http://localhost:8080/userProfile?username=" + searchResults[i].username;
             });
 
             userData.append(nameElement);
             userData.append(usernameElement);
-            userData.append(addFriendButton);
+            userData.append(visitProfileButton);
             listItem.appendChild(userData);
             requestList.appendChild(listItem);
         }

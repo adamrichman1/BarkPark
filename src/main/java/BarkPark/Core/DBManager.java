@@ -122,7 +122,7 @@ public abstract class DBManager {
             logger.error(">>> ERROR: Couldn't extract ResultSet column " + id, e);
             System.exit(1);
         }
-        return null;
+        return new String[] {};
     }
 
     /**
