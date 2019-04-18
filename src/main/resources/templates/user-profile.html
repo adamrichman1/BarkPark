@@ -60,7 +60,7 @@
 
 </div><!-- /.container -->
 
-<script>
+<script type="text/javascript" th:inline="javascript">
     setProfileUsername('[[${user.username}]]');
     populateDogList([[${user.dogs}]]);
     console.log(localStorage.getItem('username'));

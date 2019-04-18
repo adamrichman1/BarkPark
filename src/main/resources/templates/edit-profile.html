@@ -36,6 +36,11 @@
             <ul class="nav navbar-nav">
                 <li><a href="http://localhost:8080/home">Home</a></li>
                 <li class="active"><a href="http://localhost:8080/editProfile">Add/Remove Dog</a></li>
+                <li><a id="friend-request-link" href="http://localhost:8080/friendRequests">Friend Requests</a></li>
+                <script>
+                    let username = localStorage.getItem('username');
+                    document.getElementById('friend-request-link').setAttribute("href", "http://localhost:8080/friendRequests?username=" + username);
+                </script>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -106,7 +111,7 @@
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
 
 <script type="text/javascript" th:src="@{/js/edit-profile.js}"></script>
-<script>
+<script type="text/javascript" th:inline="javascript">
     let userDogs = [[${user.dogs}]];
     setUserDogs(userDogs);
     populateDogList(userDogs);

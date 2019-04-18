@@ -9,15 +9,15 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Home</title>
-
-    <script type="text/javascript" th:src="@{/js/home.js}"></script>
+    <title>Friend Requests</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/edit-profile.css}">
 
 </head>
 <body>
@@ -34,13 +34,12 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="http://localhost:8080/home">Home</a></li>
-                <li><a id="edit-profile-link">Add/Remove Dog</a></li>
-                <li><a id="friend-request-link">Friend Requests</a></li>
+                <li><a href="http://localhost:8080/home">Home</a></li>
+                <li><a id="edit-profile-link" href="http://localhost:8080/editProfile">Add/Remove Dog</a></li>
+                <li class="active"><a href="http://localhost:8080/friendRequests">Friend Requests</a></li>
                 <script>
                     let username = localStorage.getItem('username');
                     document.getElementById('edit-profile-link').setAttribute("href", "http://localhost:8080/editProfile?username=" + username);
-                    document.getElementById('friend-request-link').setAttribute("href", "http://localhost:8080/friendRequests?username=" + username);
                 </script>
             </ul>
         </div><!--/.nav-collapse -->
@@ -49,32 +48,13 @@
 
 <div class="container">
 
-    <div class="barkpark-home">
-        <h1>Home</h1>
+    <div class="main-div">
+        <h1>Friend Requests</h1>
+        <h4 id="request-header" class="lead"></h4>
 
-        <form id="search-form">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div  class="text-center">
-                        <div class="form-group">
-                            <input id="search-bar" class="form-control" placeholder="Search for friends..." required autofocus>
-                            <button id="search-button" class="btn btn-primary" type="button" onclick="findFriendsByName(document.getElementById('search-bar').value);">Search</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+        <ul id="request-list" class="list-group"></ul>
 
-        <p class="lead">Park Map</p>
 
-        <div id="map"></div>
-        <div id="right-panel">
-            <h2>Results</h2>
-            <ul id="places"></ul>
-            <button id="more">More results</button>
-        </div>
-        <!-- Replace the value of the key parameter with your own API key. -->
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBcfcMeUWpD0fzu565FtGLVBE9CsXdnzso&libraries=places&callback=initMap"></script>
     </div>
 
     <div class="container"></div>
@@ -87,7 +67,12 @@
 <!--&lt;!&ndash; Placed at the end of the document so the pages load faster &ndash;&gt;-->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-<script src="../../dist/js/bootstrap.min.js"></script>
 
+<script type="text/javascript" th:src="@{/js/friend-manager.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    let friendRequests = [[${userList.users}]];
+    console.log(friendRequests);
+    populateRequestList(friendRequests);
+</script>
 </body>
 </html>
