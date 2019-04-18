@@ -306,7 +306,7 @@ public class UserRestController {
         model.addAttribute("users", UserDBManager.findFriendsByName(name).stream()
                 .map(UserDBManager::getUserProfile)
                 .collect(Collectors.toList()));
-        return "user-list";
+        return "search-results";
     }
 
     /**
