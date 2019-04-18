@@ -1,5 +1,6 @@
 package BarkPark.Users;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,6 +17,14 @@ public class UserDBManagerTests {
     public void setup() {
         UserDBManager.dropUserTable();
         UserDBManager.createUserTable();
+    }
+
+    /**
+     * Shutdown operations
+     */
+    @After
+    public void teardown() {
+        UserDBManager.dropUserTable();
     }
 
     /**
