@@ -177,9 +177,8 @@ public abstract class DBManager {
      */
     private static PreparedStatement prepareStatement(PreparedStatement statement, Object... queryParams) {
         try {
-            int i = 1;
-            for (Object queryParam: queryParams) {
-                statement.setObject(i++, queryParam);
+            for (int i = 0; i < queryParams.length; i++) {
+                statement.setObject(i+1, queryParams[i]);
             }
             return statement;
         } catch (SQLException e) {
