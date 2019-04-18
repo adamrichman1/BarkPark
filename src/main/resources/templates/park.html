@@ -50,7 +50,7 @@
 
 <div class="container">
 
-    <div class="main-div">
+    <div class="main-div" id="main-div">
         <h1>Users in the Park</h1>
         <h4 id="request-header" class="lead"></h4>
 
@@ -73,8 +73,10 @@
 <script type="text/javascript" th:src="@{/js/park.js}"></script>
 <script type="text/javascript" th:inline="javascript">
     let peopleInPark = [[${users.users}]];
+    let parkName = [[${parkName}]];
     console.log(peopleInPark);
-    populatePeopleInPark(peopleInPark);
+    console.log(parkName);
+    populatePeopleInPark(peopleInPark, parkName);
 </script>
 </body>
 </html>

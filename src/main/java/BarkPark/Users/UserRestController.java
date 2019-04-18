@@ -155,16 +155,22 @@ public class UserRestController {
     /**
      * Used to enter a park
      *
-     * @param request the HttpRequest entity containing header information
-     * @return a ResponseEntity to the user
+     * @param parkName the name of the park
+     * @param username the username of the user entering the park
+     * @param model the model to populate
+     * @return the park template to the user
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/goToPark", headers = "Accept=application/json")
-    public ResponseEntity goToPark(HttpServletRequest request) {
-        if (ParkDBManager.isOwnerInPark(request.getHeader("parkName"), request.getHeader("username"))) {
-            return new ResponseEntity<>("User already in park", HttpStatus.BAD_REQUEST);
+    @RequestMapping(method = RequestMethod.GET, value = "/joinPark", headers = "Accept=application/json")
+    public String goToPark(@RequestParam("parkName") String parkName, @RequestParam("username") String username, Model model) {
+        if (!ParkDBManager.isOwnerInPark(parkName, username)) {
+            if (!ParkDBManager.parkExists(parkName)) {
+                ParkDBManager.insertToParkTable(parkName, username);
+            }
+            else {
+                ParkDBManager.addOwnerToPark(parkName, username);
+            }
         }
-        ParkDBManager.addOwnerToPark(request.getHeader("parkName"), request.getHeader("username"));
-        return new ResponseEntity(HttpStatus.OK);
+        return getUsersInPark(parkName, model);
     }
 
     /**
@@ -190,11 +196,12 @@ public class UserRestController {
      * @return the park template to the user
      */
     @RequestMapping(method = RequestMethod.GET, value = "/park", headers = "Accept=application/json")
-    public String leavePark(@RequestParam("parkName") String parkName, Model model) {
+    public String getUsersInPark(@RequestParam("parkName") String parkName, Model model) {
         model.addAttribute("users", new UserList(new ArrayList<>(
                 Arrays.stream(ParkDBManager.getOwnersInPark(parkName))
                         .map(UserDBManager::getUserProfile)
                         .collect(Collectors.toList()))));
+        model.addAttribute("parkName", parkName);
         return "park";
     }
 
