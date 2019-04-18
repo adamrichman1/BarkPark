@@ -337,9 +337,9 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/findFriendsByName", headers = "Accept=application/json")
     public String findFriendsByName(@RequestParam("name") String name, Model model) {
-        model.addAttribute("users", UserDBManager.findFriendsByName(name).stream()
+        model.addAttribute("users", new UserList(new ArrayList<>(UserDBManager.findFriendsByName(name).stream()
                 .map(UserDBManager::getUserProfile)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()))));
         return "search-results";
     }
 
