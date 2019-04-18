@@ -94,8 +94,20 @@ public class FriendsDBManager extends DBManager {
      * @return a list of usernames that are friends of a user
      */
     static List<String> getFriends(String username) {
-        List<String> friends = findFriendsOfUser1(username);
-        friends.addAll(findFriendsOfUser2(username));
+        List<String> friends = findFriendsOfUser1(username, true);
+        friends.addAll(findFriendsOfUser2(username, true));
+        return friends;
+    }
+
+    /**
+     * Finds all usernames of pending friend requests for a user
+     *
+     * @param username the name of the username to find friend requests for
+     * @return a list of usernames that are pending friends of a user
+     */
+    static List<String> getPendingFriendRequests(String username) {
+        List<String> friends = findFriendsOfUser1(username, false);
+        friends.addAll(findFriendsOfUser2(username, false));
         return friends;
     }
 
@@ -103,22 +115,24 @@ public class FriendsDBManager extends DBManager {
      * Finds a list of usernames who are friends with the specified user
      *
      * @param user1 the username of the user stored in the user1 col of the friends table
+     * @param accepted true if the users are friends, false otherwise
      * @return a list of usernames
      */
-    private static List<String> findFriendsOfUser1(String user1) {
-        String sql = "SELECT user2 AS user FROM " + friendsTable + " WHERE user1=? AND accepted=TRUE";
-        return populateUsernameList(executeQuery(sql, user1));
+    private static List<String> findFriendsOfUser1(String user1, boolean accepted) {
+        String sql = "SELECT user2 AS user FROM " + friendsTable + " WHERE user1=? AND accepted=?";
+        return populateUsernameList(executeQuery(sql, user1, accepted));
     }
 
     /**
      * Finds a list of usernames who are friends with the specified user
      *
      * @param user2 the username of the user stored in the user2 col of the friends table
+     * @param accepted true if the users are friends, false otherwise
      * @return a list of usernames
      */
-    private static List<String> findFriendsOfUser2(String user2) {
-        String sql = "SELECT user1 AS user FROM " + friendsTable + " WHERE user2=? AND accepted=TRUE";
-        return populateUsernameList(executeQuery(sql, user2));
+    private static List<String> findFriendsOfUser2(String user2, boolean accepted) {
+        String sql = "SELECT user1 AS user FROM " + friendsTable + " WHERE user2=? AND accepted=?";
+        return populateUsernameList(executeQuery(sql, user2, accepted));
     }
 
     /**

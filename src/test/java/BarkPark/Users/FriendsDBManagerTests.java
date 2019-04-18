@@ -120,6 +120,37 @@ public class FriendsDBManagerTests {
     }
 
     /**
+     * Tests getPendingFriendRequests()
+     */
+    @Test
+    public void testGetPendingFriendRequests() {
+        List<String> adamsFriends = Arrays.asList("josh", "joe", "chris");
+
+        // Add and accept friend request
+        FriendsDBManager.addFriendRequest("adam", "josh");
+
+        // Add and accept friend request
+        FriendsDBManager.addFriendRequest("adam", "joe");
+
+        // Add and accept friend request
+        FriendsDBManager.addFriendRequest("adam", "chris");
+
+        // Add and accept friend request
+        FriendsDBManager.addFriendRequest("adam", "sohel");
+        FriendsDBManager.acceptFriendRequest("sohel", "adam");
+
+        // Add and accept friend request for a different user
+        FriendsDBManager.addFriendRequest("joe", "ian");
+        FriendsDBManager.acceptFriendRequest("ian", "joe");
+
+        // Find friends
+        List<String> friends = FriendsDBManager.getPendingFriendRequests("adam");
+        adamsFriends.forEach(friend -> assertTrue(friends.contains(friend)));
+        assertFalse(friends.contains("sohel"));
+        assertFalse(friends.contains("ian"));
+    }
+
+    /**
      * Tests areFriends() when the users are friends
      */
     @Test

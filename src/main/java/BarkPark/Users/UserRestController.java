@@ -282,6 +282,18 @@ public class UserRestController {
     }
 
     /**
+     * Used to get all friends of a user
+     *
+     * @param request the HttpRequest entity containing header information
+     * @return a ResponseEntity to the user
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/getFriendRequests", headers = "Accept=application/json")
+    public ResponseEntity getPendingFriendRequests(HttpServletRequest request) {
+        List<String> usernames = FriendsDBManager.getPendingFriendRequests(request.getHeader("username"));
+        return new ResponseEntity<>(usernames.stream().map(UserDBManager::getUserProfile), HttpStatus.OK);
+    }
+
+    /**
      * Used to get the edit-profile template
      *
      * @param model the model to populate the template with
