@@ -90,7 +90,6 @@ function establishFriendStatus(userFriends) {
     } else {
         sendFriendRequestButton.innerText = "Friends";
         sendFriendRequestButton.className="btn btn-success";
-        sendFriendRequestButton.removeEventListener('click', friendRequestListener);
         sendFriendRequestButton.hidden=false;
     }
 }
@@ -118,6 +117,7 @@ function friendRequestListener() {
 
 function changeButtonToPending() {
     let pendingButton = document.getElementById('friend-button');
+    pendingButton.removeEventListener('click', friendRequestListener);
     pendingButton.className='btn btn-default';
     pendingButton.innerText='Pending Request';
 }
