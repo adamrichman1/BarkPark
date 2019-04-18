@@ -38,6 +38,7 @@
                 <li><a id="edit-profile-link">My Profile</a></li>
                 <li><a id="friend-request-link">Friend Requests</a></li>
                 <li><a id="friends-link">Friends</a></li>
+                <li><a href="http://localhost:8080/">Logout</a></li>
                 <script>
                     let username = sessionStorage.getItem('username');
                     document.getElementById('edit-profile-link').setAttribute("href", "http://localhost:8080/editProfile?username=" + username);
