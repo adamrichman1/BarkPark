@@ -170,7 +170,7 @@ public class UserRestController {
                 ParkDBManager.addOwnerToPark(parkName, username);
             }
         }
-        return getUsersInPark(parkName, model);
+        return getUsersInPark(parkName, username, model);
     }
 
     /**
@@ -184,23 +184,26 @@ public class UserRestController {
     @RequestMapping(method = RequestMethod.GET, value = "/leavePark", headers = "Accept=application/json")
     public String leavePark(@RequestParam("parkName") String parkName, @RequestParam("username") String username, Model model) {
         ParkDBManager.deleteUserFromPark(parkName, username);
-        return getUsersInPark(parkName, model);
+        return getUsersInPark(parkName, username, model);
     }
 
     /**
      * Finds a list of people in a park
      *
      * @param parkName the name of the park
+     * @param username the requesting username
      * @param model the model to populate with data
      * @return the park template to the user
      */
     @RequestMapping(method = RequestMethod.GET, value = "/park", headers = "Accept=application/json")
-    public String getUsersInPark(@RequestParam("parkName") String parkName, Model model) {
+    public String getUsersInPark(@RequestParam("parkName") String parkName, @RequestParam("username") String username, Model model) {
         model.addAttribute("users", new UserList(new ArrayList<>(
                 Arrays.stream(ParkDBManager.getOwnersInPark(parkName))
                         .map(UserDBManager::getUserProfile)
                         .collect(Collectors.toList()))));
         model.addAttribute("parkName", parkName);
+        model.addAttribute("friends", new UserList(new ArrayList<>(FriendsDBManager.getFriends(username).stream()
+                .map(UserDBManager::getUserProfile).collect(Collectors.toList()))));
         return "park";
     }
 

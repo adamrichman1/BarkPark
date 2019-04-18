@@ -66,7 +66,7 @@ function createMarkers(places) {
         let li = document.createElement('li');
         li.textContent = place.name;
         let placeLink = document.createElement('a');
-        placeLink.setAttribute("href", "http://localhost:8080/park?parkName=" + place.name);
+        placeLink.setAttribute("href", "http://localhost:8080/park?parkName=" + place.name + "&username=" + sessionStorage.getItem("username"));
         placeLink.appendChild(li);
         placesList.appendChild(placeLink);
 

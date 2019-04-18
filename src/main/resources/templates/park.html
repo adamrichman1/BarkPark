@@ -75,9 +75,11 @@
 <script type="text/javascript" th:inline="javascript">
     let peopleInPark = [[${users.users}]];
     let parkName = [[${parkName}]];
+    let friends = [[${friends.users}]];
     console.log(peopleInPark);
     console.log(parkName);
-    populatePeopleInPark(peopleInPark, parkName);
+    console.log("FRIENDS: " +friends);
+    populatePeopleInPark(peopleInPark, parkName, friends);
 </script>
 </body>
 </html>

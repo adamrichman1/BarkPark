@@ -1,4 +1,4 @@
-function populatePeopleInPark(peopleInPark, parkName) {
+function populatePeopleInPark(peopleInPark, parkName, friends) {
     document.getElementById("park-label").innerText="Users in " + parkName;
     if (peopleInPark.length !== 0) {
         let requestList = document.getElementById('request-list');
@@ -29,6 +29,14 @@ function populatePeopleInPark(peopleInPark, parkName) {
             userData.append(nameElement);
             userData.append(usernameElement);
             userData.append(visitProfileButton);
+
+            if (listContainsUsername(friends, peopleInPark[i].username)) {
+                let areFriendElement = document.createElement('h4');
+                areFriendElement.className = 'text-success';
+                areFriendElement.innerText = "*Friend*";
+                userData.appendChild(areFriendElement);
+            }
+
             listItem.appendChild(userData);
             requestList.appendChild(listItem);
         }
@@ -37,7 +45,7 @@ function populatePeopleInPark(peopleInPark, parkName) {
         let requestHeader = document.getElementById('request-header');
         requestHeader.innerHTML = '<em>No BarkPark users are currently in ' + parkName +'\n</em>';
     }
-    if (!alreadyInPark(peopleInPark)) {
+    if (!listContainsUsername(peopleInPark, sessionStorage.getItem("username"))) {
         let goToParkButton = document.createElement('button');
         goToParkButton.type = 'button';
         goToParkButton.className = 'btn btn-success';
@@ -59,8 +67,8 @@ function populatePeopleInPark(peopleInPark, parkName) {
     }
 }
 
-function alreadyInPark(users) {
+function listContainsUsername(users, toFind) {
     return users.some(function(user) {
-        return user.username === sessionStorage.getItem("username");
+        return user.username === toFind;
     });
 }
