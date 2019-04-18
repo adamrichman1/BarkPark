@@ -1,8 +1,14 @@
 package BarkPark.Dogs;
 
 import BarkPark.Core.DBManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.*;
+import java.util.Arrays;
 
 public class PartyDBManager extends DBManager {
+    private static Logger logger = LoggerFactory.getLogger(PartyDBManager.class);
     private static String partyTable = "parties";
 
     /**
@@ -29,9 +35,9 @@ public class PartyDBManager extends DBManager {
      * @param parkName the name of the park
      * @param ownerUsername the name of the username who entered the park for the first time
      */
-    public static void insertToPartyTable(String parkName, String partyName, String ownerUsername) {
-        String sql = "INSERT INTO " + partyTable + " (parkName, hostName, partyName, party) VALUES (?, ?, ?, ?)";
-        executeUpdate(sql, parkName, ownerUsername, partyName, new String[] {});
+    public static DogParty insertToPartyTable(String parkName, String partyName, String ownerUsername) {
+        String sql = "INSERT INTO " + partyTable + " (parkName, hostName, partyName, party) VALUES (?, ?, ?, ?) RETURNING *";
+        return populateDogParty(executeUpdate(sql, parkName, ownerUsername, partyName, new String[] {}));
     }
 
     /**
@@ -42,8 +48,8 @@ public class PartyDBManager extends DBManager {
      * @param ownerUsername the user to add
      */
     public static void addUserToParty(String parkName, String partyName, String ownerUsername) {
-        String sql = "UPDATE " + partyTable + " SET party=party || {?} WHERE parkName=? AND partyName=?";
-        executeUpdate(sql, ownerUsername, parkName, partyName);
+        String sql = "UPDATE " + partyTable + " SET party=party || ?::TEXT[] WHERE parkName=? AND partyName=?";
+        executeUpdate(sql, new String[] {ownerUsername}, parkName, partyName);
     }
 
     /**
@@ -55,8 +61,8 @@ public class PartyDBManager extends DBManager {
      * @return true if the owner is in a party, false otherwise
      */
     public static boolean isUserInParty(String parkName, String partyName, String ownerUsername) {
-        String sql = "SELECT COUNT(*) AS count FROM " + partyTable + " WHERE parkName=? AND partyName=? AND ?=ANY(party)";
-        return deserializeResultSetCol(executeQuery(sql, parkName, partyName, ownerUsername), "count", int.class) == 1;
+        String sql = "SELECT COUNT(*) AS count FROM " + partyTable + " WHERE parkName=? AND partyName=? AND (?=ANY(party) OR ?=hostName)";
+        return deserializeResultSetCol(executeQuery(sql, parkName, partyName, ownerUsername, ownerUsername), "count", int.class) == 1;
     }
 
     /**
@@ -90,7 +96,26 @@ public class PartyDBManager extends DBManager {
      * @param ownerUsername the name of the user to remove from the party
      */
     public static void removeUserFromParty(String parkName, String partyName, String ownerUsername) {
-        String sql = "UPDATE " + partyTable + " SET party=ARRAY_REMOVE(party, ?) WHERE parkName=? AND partyName=?";
+        String sql = "UPDATE " + partyTable + " SET party=ARRAY_REMOVE(party, ?::TEXT) WHERE parkName=? AND partyName=?";
         executeUpdate(sql, ownerUsername, parkName, partyName);
+    }
+
+    /**
+     * Populates a dog party object following a DB query
+     *
+     * @param rs the ResultSet object
+     * @return a dog party object
+     */
+    private static DogParty populateDogParty(ResultSet rs) {
+        try {
+            if (rs.next()) {
+                return new DogParty(rs.getString("parkName"), rs.getString("partyName"),
+                        rs.getString("hostName"), Arrays.asList(deserializeStringArray(rs, "party", true)));
+            }
+        } catch (SQLException e) {
+            logger.error(">>> ERROR: Couldn't populate DogParty from ResultSet", e);
+            System.exit(1);
+        }
+        return null;
     }
 }

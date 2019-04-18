@@ -14,7 +14,7 @@ import java.sql.*;
 public abstract class DBManager {
 
     private static Logger logger = LoggerFactory.getLogger(DBManager.class);
-    private static String dbURL = "jdbc:postgresql://localhost:5432/postgres";
+    protected static String dbURL = "jdbc:postgresql://localhost:5432/postgres";
 
     /**
      * Used to initialize DBManager resources
@@ -30,7 +30,7 @@ public abstract class DBManager {
      *
      * @return a Connection object for the DB
      */
-    private static Connection connect(String dbURL) {
+    protected static Connection connect(String dbURL) {
         Connection c = null;
         try {
             if (dbURL != null) c = DriverManager.getConnection(dbURL);
@@ -51,7 +51,7 @@ public abstract class DBManager {
      *
      * @param c the Connection object to close
      */
-    private static void close(Connection c) {
+    protected static void close(Connection c) {
         try {
             c.close();
         } catch(SQLException e) {
@@ -117,13 +117,15 @@ public abstract class DBManager {
      * Parses a String array from a ResultSet object following a DB query
      *
      * @param rs the ResultSet object to parse
+     * @param id the id of the column
+     * @param resultSetIterated true if the ResultSet has already been iterated over, false otherwise
      * @return an array of String objects
      */
-    protected static String[] deserializeStringArray(ResultSet rs, String id) {
+    protected static String[] deserializeStringArray(ResultSet rs, String id, boolean resultSetIterated) {
         try {
-            if (rs.next()) {
-                String toParse = rs.getString(id);
-                return toParse.replace("{", "").replace("}", "").split(",");
+            if (resultSetIterated || rs.next()) {
+                String toParse = rs.getString(id).replace("{", "").replace("}", "");
+                return toParse.equals("") ? new String[] {} : toParse.split(",");
             }
         } catch (SQLException e) {
             logger.error(">>> ERROR: Couldn't extract ResultSet column " + id, e);
@@ -182,7 +184,7 @@ public abstract class DBManager {
      * @param queryParams the parameters to prepare the statement with
      * @return the prepared statement
      */
-    private static PreparedStatement prepareStatement(PreparedStatement statement, Object... queryParams) {
+    protected static PreparedStatement prepareStatement(PreparedStatement statement, Object... queryParams) {
         try {
             int i = 1;
             for (Object queryParam: queryParams) {

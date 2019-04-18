@@ -85,6 +85,6 @@ public class ParkDBManager extends DBManager {
      */
     public static String[] getOwnersInPark(String parkName) {
         String sql = "SELECT ownerUsernames FROM " + parkTable + " WHERE parkName=?";
-        return deserializeStringArray(executeQuery(sql, parkName), "ownerUsernames");
+        return deserializeStringArray(executeQuery(sql, parkName), "ownerUsernames", false);
     }
 }
