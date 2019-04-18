@@ -19,22 +19,49 @@ function populateSearchResults(searchResults) {
             usernameElement.className = 'small';
             usernameElement.innerText = "Username: " + searchResults[i].username;
 
-            let addFriendButton = document.createElement('button');
-            addFriendButton.type = 'button';
-            addFriendButton.className = 'btn btn-success';
-            addFriendButton.innerText = 'Visit Profile';
-            addFriendButton.addEventListener('click', function() {
+            let visitProfileButton = document.createElement('button');
+            visitProfileButton.type = 'button';
+            visitProfileButton.className = 'btn btn-primary';
+            visitProfileButton.innerText = 'Visit Profile';
+            visitProfileButton.addEventListener('click', function() {
                 window.location = "http://localhost:8080/userProfile?username=" + searchResults[i].username;
             });
 
+            let backDiv = document.createElement('div');
+            backDiv.className='main-div';
+
+            let backToHomeButton = document.createElement('button');
+            backToHomeButton.className = 'btn btn-primary';
+            backToHomeButton.textContent = 'Go Back';
+            backToHomeButton.addEventListener('click', function() {
+                window.location.href="http://localhost:8080/home";
+            });
+
+            backDiv.appendChild(backToHomeButton);
+
             userData.append(nameElement);
             userData.append(usernameElement);
-            userData.append(addFriendButton);
+            userData.append(visitProfileButton);
             listItem.appendChild(userData);
             requestList.appendChild(listItem);
+            requestList.appendChild(backDiv);
         }
     } else {
         let requestHeader = document.getElementById('request-header');
         requestHeader.innerHTML = '<em>No matching users were found</em>';
+        let requestList = document.getElementById('request-list');
+
+        let backDiv = document.createElement('div');
+        backDiv.className='main-div';
+
+        let backToHomeButton = document.createElement('button');
+        backToHomeButton.className = 'btn btn-primary';
+        backToHomeButton.textContent = 'Go Back';
+        backToHomeButton.addEventListener('click', function() {
+            window.location.href="http://localhost:8080/home";
+        });
+
+        backDiv.appendChild(backToHomeButton);
+        requestList.appendChild(backDiv);
     }
 }

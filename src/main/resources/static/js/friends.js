@@ -17,8 +17,17 @@ function populateFriendsList(friends) {
             usernameElement.className = 'small';
             usernameElement.innerText = "Username: " + friends[i].username;
 
+            let visitProfileButton = document.createElement('button');
+            visitProfileButton.type = 'button';
+            visitProfileButton.className = 'btn btn-primary';
+            visitProfileButton.innerText = 'Visit Profile';
+            visitProfileButton.addEventListener('click', function() {
+                window.location = "http://localhost:8080/userProfile?username=" + friends[i].username;
+            });
+
             userData.append(nameElement);
             userData.append(usernameElement);
+            userData.append(visitProfileButton);
             listItem.appendChild(userData);
             requestList.appendChild(listItem);
         }

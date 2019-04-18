@@ -73,15 +73,15 @@ function checkIfUsersAreFriends(userFriends) {
 }
 
 function establishFriendStatus(userFriends) {
+    let unfriendButton = document.getElementById('unfriend-button');
     let sendFriendRequestButton = document.getElementById('friend-button');
     let usersAreFriends = checkIfUsersAreFriends(userFriends);
-    let unfriendButton = document.getElementById('unfriend-button');
 
     if (!usersAreFriends) {
         sendFriendRequestButton.innerText = "Send Friend Request";
         sendFriendRequestButton.className="btn btn-default";
         sendFriendRequestButton.addEventListener('click', friendRequestListener);
-        unfriendButton.hidden=true;
+        unfriendButton.setAttribute('hidden', 'true');
         sendFriendRequestButton.hidden=false;
     } else {
         sendFriendRequestButton.innerText = "Friends";
@@ -126,7 +126,7 @@ function unfriendListener() {
         },
         contentType: "application/json",
         success: function() {
-            getFriends(profileUsername);
+            window.location.reload();
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR.status);
