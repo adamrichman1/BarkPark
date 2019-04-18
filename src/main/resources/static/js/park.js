@@ -1,4 +1,4 @@
-function populatePeopleInPark(peopleInPark) {
+function populatePeopleInPark(peopleInPark, parkName) {
     if (peopleInPark.length !== 0) {
         let requestList = document.getElementById('request-list');
 
@@ -33,6 +33,14 @@ function populatePeopleInPark(peopleInPark) {
         }
     } else {
         let requestHeader = document.getElementById('request-header');
-        requestHeader.innerHTML = '<em>No BarkPark users are currently in the park :(</em>';
+        requestHeader.innerHTML = '<em>No BarkPark users are currently in ' + parkName + ' :(</em>';
     }
+    let goToParkButton = document.createElement('button');
+    goToParkButton.type = 'button';
+    goToParkButton.className = 'btn btn-success';
+    goToParkButton.innerText = 'Join Park';
+    goToParkButton.addEventListener('click', function() {
+        window.location = "http://localhost:8080/joinPark?parkName=" + parkName + "&username=" + sessionStorage.getItem("username");
+    });
+    document.getElementById('main-div').appendChild(goToParkButton);
 }
