@@ -55,12 +55,12 @@ public class FriendsDBManager extends DBManager {
     /**
      * Used to add a friendship between two users in the DB
      *
-     * @param username username of user who sent request
-     * @param friendUsername username of new friend
+     * @param receivingUsername username of user who received request
+     * @param sendingUsername username of user who sent request
      */
-    static void acceptFriendRequest(String username, String friendUsername) {
+    static void acceptFriendRequest(String receivingUsername, String sendingUsername) {
         String sql = "UPDATE " + friendsTable + " SET accepted=TRUE WHERE user1=? AND user2=?";
-        executeUpdate(sql, username, friendUsername);
+        executeUpdate(sql, sendingUsername, receivingUsername);
     }
 
     /**
@@ -76,14 +76,38 @@ public class FriendsDBManager extends DBManager {
     }
 
     /**
+     * Checks if two users are friends
+     *
+     * @param user1 the first user being checked
+     * @param user2 the second user being checked
+     * @return true if the two users are friends, false otherwise
+     */
+    static boolean areFriends(String user1, String user2) {
+        String sql = "SELECT COUNT(*) AS count FROM " + friendsTable + " WHERE user1 IN (?, ?) AND user2 IN (?, ?) AND accepted=TRUE";
+        return deserializeResultSetCol(executeQuery(sql, user1, user2, user1, user2),"count", int.class) == 1;
+    }
+
+    /**
      * Finds all usernames of friends for a user
      *
      * @param username the name of the username to find friends for
      * @return a list of usernames that are friends of a user
      */
     static List<String> getFriends(String username) {
-        List<String> friends = findFriendsOfUser1(username);
-        friends.addAll(findFriendsOfUser2(username));
+        List<String> friends = findFriendsOfUser1(username, true);
+        friends.addAll(findFriendsOfUser2(username, true));
+        return friends;
+    }
+
+    /**
+     * Finds all usernames of pending friend requests for a user
+     *
+     * @param username the name of the username to find friend requests for
+     * @return a list of usernames that are pending friends of a user
+     */
+    static List<String> getPendingFriendRequests(String username) {
+        List<String> friends = findFriendsOfUser1(username, false);
+        friends.addAll(findFriendsOfUser2(username, false));
         return friends;
     }
 
@@ -91,22 +115,24 @@ public class FriendsDBManager extends DBManager {
      * Finds a list of usernames who are friends with the specified user
      *
      * @param user1 the username of the user stored in the user1 col of the friends table
+     * @param accepted true if the users are friends, false otherwise
      * @return a list of usernames
      */
-    private static List<String> findFriendsOfUser1(String user1) {
-        String sql = "SELECT user2 AS user FROM " + friendsTable + " WHERE user1=? AND accepted=TRUE";
-        return populateUsernameList(executeQuery(sql, user1));
+    private static List<String> findFriendsOfUser1(String user1, boolean accepted) {
+        String sql = "SELECT user2 AS user FROM " + friendsTable + " WHERE user1=? AND accepted=?";
+        return populateUsernameList(executeQuery(sql, user1, accepted));
     }
 
     /**
      * Finds a list of usernames who are friends with the specified user
      *
      * @param user2 the username of the user stored in the user2 col of the friends table
+     * @param accepted true if the users are friends, false otherwise
      * @return a list of usernames
      */
-    private static List<String> findFriendsOfUser2(String user2) {
-        String sql = "SELECT user1 AS user FROM " + friendsTable + " WHERE user2=? AND accepted=TRUE";
-        return populateUsernameList(executeQuery(sql, user2));
+    private static List<String> findFriendsOfUser2(String user2, boolean accepted) {
+        String sql = "SELECT user1 AS user FROM " + friendsTable + " WHERE user2=? AND accepted=?";
+        return populateUsernameList(executeQuery(sql, user2, accepted));
     }
 
     /**
@@ -127,17 +153,5 @@ public class FriendsDBManager extends DBManager {
             System.exit(1);
         }
         return null;
-    }
-
-    /**
-     * Checks if two users are friends
-     *
-     * @param user1 the first user being checked
-     * @param user2 the second user being checked
-     * @return true if the two users are friends, false otherwise
-     */
-    static boolean areFriends(String user1, String user2) {
-        String sql = "SELECT COUNT(*) AS count FROM " + friendsTable + " WHERE user1 IN (?, ?) AND user2 IN (?, ?) AND accepted=TRUE";
-        return deserializeResultSetCol(executeQuery(sql, user1, user2, user1, user2),"count", int.class) == 1;
     }
 }
