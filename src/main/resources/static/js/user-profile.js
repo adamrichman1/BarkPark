@@ -79,28 +79,22 @@ function checkIfUsersAreFriends(userFriends) {
 }
 
 function establishFriendStatus(userFriends) {
-    let friendManagementDiv = document.getElementById('friend-management');
-    let sendFriendRequestButton = document.createElement('send-friend-request-button');
-
+    let sendFriendRequestButton = document.getElementById('friend-button');
     let usersAreFriends = checkIfUsersAreFriends(userFriends);
 
     if (!usersAreFriends) {
         sendFriendRequestButton.innerText = "Send Friend Request";
         sendFriendRequestButton.className="btn btn-default";
-        friendManagementDiv.appendChild(sendFriendRequestButton);
         sendFriendRequestButton.addEventListener('click', friendRequestListener);
+        sendFriendRequestButton.hidden=false;
     } else {
         sendFriendRequestButton.innerText = "Friends";
         sendFriendRequestButton.className="btn btn-success";
-        friendManagementDiv.appendChild(sendFriendRequestButton);
-        sendFriendRequestButton.removeEventListener('click', friendRequestListener);
+        sendFriendRequestButton.hidden=false;
     }
 }
 
 function friendRequestListener() {
-    console.log(localStorage.getItem('username'));
-    console.log(profileUsername);
-
     $.ajax({
         url: "http://localhost:8080/sendFriendRequest",
         type: 'POST',
@@ -122,11 +116,8 @@ function friendRequestListener() {
 }
 
 function changeButtonToPending() {
-    let friendManagementDiv = document.getElementById('friend-management');
-    let sendFriendRequestButton = document.createElement('send-friend-request-button');
-    friendManagementDiv.removeChild(sendFriendRequestButton);
-    let pendingButton = document.createElement('pending-button');
+    let pendingButton = document.getElementById('friend-button');
+    pendingButton.removeEventListener('click', friendRequestListener);
     pendingButton.className='btn btn-default';
     pendingButton.innerText='Pending Request';
-    friendManagementDiv.appendChild(pendingButton);
 }
