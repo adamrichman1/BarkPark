@@ -28,6 +28,7 @@ import java.io.IOException;
 public class Application {
     private static Logger logger = LoggerFactory.getLogger(Application.class);
     private static Thread dogAgeTracker;
+    private static boolean dropTable = false;
 
     /**
      * This method is used on startup and is called implicitly by Spring Boot
@@ -71,7 +72,9 @@ public class Application {
      * Initializes DogDBManager
      */
     private static void initializeDogDBManager() {
-        DogDBManager.dropDogTable();
+        if (dropTable) {
+            DogDBManager.dropDogTable();
+        }
         DogDBManager.createDogTable();
     }
 
@@ -79,7 +82,9 @@ public class Application {
      * Initializes UserDBManager
      */
     private static void initializeUserDBManager() {
-        UserDBManager.dropUserTable();
+        if (dropTable) {
+            UserDBManager.dropUserTable();
+        }
         UserDBManager.createUserTable();
     }
 
@@ -87,7 +92,9 @@ public class Application {
      * Initializes ParkDBManager
      */
     private static void initializeParkDBManager() {
-        ParkDBManager.dropParkTable();
+        if (dropTable) {
+            ParkDBManager.dropParkTable();
+        }
         ParkDBManager.createParkTable();
     }
 
@@ -95,7 +102,9 @@ public class Application {
      * Initializes FriendsDBManager
      */
     private static void initializeFriendsDBManager() {
-        FriendsDBManager.dropFriendsTable();
+        if (dropTable) {
+            FriendsDBManager.dropFriendsTable();
+        }
         FriendsDBManager.createFriendsTable();
     }
 
@@ -103,7 +112,9 @@ public class Application {
      * Initializes PartyDBManager
      */
     private static void initializePartyDBManager() {
-        PartyDBManager.dropPartyTable();
+        if (dropTable) {
+            PartyDBManager.dropPartyTable();
+        }
         PartyDBManager.createPartyTable();
     }
 
