@@ -1,4 +1,4 @@
-function populateFriendsList(peopleInPark) {
+function populatePeopleInPark(peopleInPark) {
     if (peopleInPark.length !== 0) {
         let requestList = document.getElementById('request-list');
 
@@ -17,13 +17,22 @@ function populateFriendsList(peopleInPark) {
             usernameElement.className = 'small';
             usernameElement.innerText = "Username: " + peopleInPark[i].username;
 
+            let visitProfileButton = document.createElement('button');
+            visitProfileButton.type = 'button';
+            visitProfileButton.className = 'btn btn-success';
+            visitProfileButton.innerText = 'Visit Profile';
+            visitProfileButton.addEventListener('click', function() {
+                window.location = "http://localhost:8080/userProfile?username=" + peopleInPark[i].username;
+            });
+
             userData.append(nameElement);
             userData.append(usernameElement);
+            userData.append(visitProfileButton);
             listItem.appendChild(userData);
             requestList.appendChild(listItem);
         }
     } else {
         let requestHeader = document.getElementById('request-header');
-        requestHeader.innerHTML = '<em>You have no peopleInPark :(</em>';
+        requestHeader.innerHTML = '<em>No BarkPark users are currently in the park :(</em>';
     }
 }

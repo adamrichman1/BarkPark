@@ -1,6 +1,7 @@
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
 let map;
+let service = null;
 
 function initMap() {
     // Create the map.
@@ -11,31 +12,40 @@ function initMap() {
     });
 
     // Create the places service.
-    let service = new google.maps.places.PlacesService(map);
+    service = new google.maps.places.PlacesService(map);
     let getNextPage = null;
     let moreButton = document.getElementById('more');
     moreButton.onclick = function() {
-        moreButton.disabled = true;
+        searchCur();
         if (getNextPage) getNextPage();
     };
 
+    search(schenleyPark);
+}
+
+function searchCur() {
+    console.log(map.getCenter());
+    search(map.getCenter());
+}
+
+function search(coordinates) {
+    console.log(coordinates);
     // Perform a nearby search.
     service.nearbySearch(
-        {location: schenleyPark, radius: 500, type: ['park']},
+        {location: coordinates, radius: 500, type: ['park']},
         function(results, status, pagination) {
             if (status !== 'OK') return;
 
             createMarkers(results);
-            moreButton.disabled = !pagination.hasNextPage;
-            getNextPage = pagination.hasNextPage && function() {
-                pagination.nextPage();
-            };
         });
 }
 
 function createMarkers(places) {
     let bounds = new google.maps.LatLngBounds();
     let placesList = document.getElementById('places');
+    while(placesList.firstChild) {
+        placesList.removeChild(placesList.firstChild);
+    }
 
     for (let i = 0, place; place = places[i]; i++) {
         let image = {
@@ -56,9 +66,9 @@ function createMarkers(places) {
         let li = document.createElement('li');
         li.textContent = place.name;
         let placeLink = document.createElement('a');
-        placeLink.href = "";
-        li.appendChild(placeLink);
-        placesList.appendChild(li);
+        placeLink.setAttribute("href", "http://localhost:8080/park?parkName=" + place.name);
+        placeLink.appendChild(li);
+        placesList.appendChild(placeLink);
 
         bounds.extend(place.geometry.location);
     }
