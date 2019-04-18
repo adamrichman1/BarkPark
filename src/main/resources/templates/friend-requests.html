@@ -35,10 +35,10 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li><a href="http://localhost:8080/home">Home</a></li>
-                <li><a id="edit-profile-link" href="http://localhost:8080/editProfile">Add/Remove Dog</a></li>
-                <li class="active"><a href="http://localhost:8080/friendRequests">Friend Requests</a></li>
+                <li><a id="edit-profile-link">Add/Remove Dog</a></li>
+                <li class="active"><a>Friend Requests</a></li>
                 <script>
-                    let username = localStorage.getItem('username');
+                    let username = sessionStorage.getItem('username');
                     document.getElementById('edit-profile-link').setAttribute("href", "http://localhost:8080/editProfile?username=" + username);
                 </script>
             </ul>
@@ -72,6 +72,7 @@
 <script type="text/javascript" th:inline="javascript">
     let friendRequests = [[${userList.users}]];
     console.log(friendRequests);
+    setRequestList(friendRequests);
     populateRequestList(friendRequests);
 </script>
 </body>

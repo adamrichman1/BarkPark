@@ -70,7 +70,7 @@ function checkIfUsersAreFriends(userFriends) {
 
     if(userFriends.length !== 0) {
         userFriends.forEach(function(friend) {
-            if(friend.username === localStorage.getItem('username')) {
+            if(friend.username === sessionStorage.getItem('username')) {
                 return true;
             }
         });
@@ -99,7 +99,7 @@ function friendRequestListener() {
         url: "http://localhost:8080/sendFriendRequest",
         type: 'POST',
         headers: {
-            "username": localStorage.getItem('username'),
+            "username": sessionStorage.getItem('username'),
             "friendUsername": profileUsername
         },
         contentType: "application/json",

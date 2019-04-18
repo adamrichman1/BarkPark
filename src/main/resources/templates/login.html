@@ -51,7 +51,7 @@
         };
         document.getElementById("signin-form").reset();
         console.log(formData);
-        localStorage.setItem('username', formData.username);
+        sessionStorage.setItem('username', formData.username);
         $.ajax({
             url: "http://localhost:8080/login",
             type: 'POST',

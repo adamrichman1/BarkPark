@@ -1,5 +1,5 @@
 let addDogButton = document.getElementById('add-dog-button');
-let ownerUsername = localStorage.getItem('username');
+let ownerUsername = sessionStorage.getItem('username');
 let allDogs = null;
 
 function setUserDogs(dogs) {
@@ -67,7 +67,7 @@ function populateDogList(dogs) {
             deleteButton.textContent = 'Remove Dog';
             deleteButton.addEventListener('click', function() {
                 const formData = {
-                    "ownerUsername": localStorage.getItem('username'),
+                    "ownerUsername": sessionStorage.getItem('username'),
                     "name": dogName
                 };
                 removeDog(formData);
@@ -94,7 +94,7 @@ function removeDog(data) {
         type: 'DELETE',
         contentType: "application/json",
         headers: {
-            'username': localStorage.getItem("username")
+            'username': sessionStorage.getItem("username")
         },
         data: JSON.stringify(data),
         success: function() {

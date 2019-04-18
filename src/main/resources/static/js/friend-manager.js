@@ -1,3 +1,9 @@
+let allRequests = null;
+
+function setRequestList(requestList) {
+    allRequests = requestList;
+}
+
 function populateRequestList(requests) {
     if (requests.length !== 0) {
         let requestHeader = document.getElementById('request-header');
@@ -20,8 +26,39 @@ function populateRequestList(requests) {
             usernameElement.className = 'small';
             usernameElement.innerText = "Username: " + requests[i].username;
 
+            let addFriendButton = document.createElement('button');
+            addFriendButton.type = 'button';
+            addFriendButton.className = 'btn btn-success';
+            addFriendButton.innerText = 'Add Friend';
+            addFriendButton.addEventListener('click', function() {
+                const formData = {
+                    "username": sessionStorage.getItem('username'),
+                    "friendUsername": requests[i].username
+                };
+                console.log(formData);
+                $.ajax({
+                    url: "http://localhost:8080/acceptFriendRequest",
+                    type: 'POST',
+                    data: JSON.stringify(formData),
+                    contentType: "application/json",
+                    success: function() {
+                        allRequests.splice(i);
+                        resetRequestList();
+                        populateRequestList(allDogs);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status);
+                        console.log(textStatus);
+                        console.log(errorThrown);
+                        // TODO - ERROR HANDLE
+                    }
+                });
+            });
+
+
             userData.append(nameElement);
             userData.append(usernameElement);
+            userData.append(addFriendButton);
 
             listItem.appendChild(userData);
 
@@ -30,5 +67,12 @@ function populateRequestList(requests) {
     } else {
         let requestHeader = document.getElementById('request-header');
         requestHeader.innerHTML = '<em>No pending friend requests</em>';
+    }
+}
+
+function resetRequestList() {
+    let requestList = document.getElementById('request-list');
+    while(requestList.firstChild) {
+        requestList.removeChild(requestList.firstChild);
     }
 }
