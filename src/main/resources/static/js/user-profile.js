@@ -81,6 +81,7 @@ function establishFriendStatus(userFriends) {
         sendFriendRequestButton.innerText = "Send Friend Request";
         sendFriendRequestButton.className="btn btn-default";
         sendFriendRequestButton.addEventListener('click', friendRequestListener);
+        unfriendButton.hidden=true;
         sendFriendRequestButton.hidden=false;
     } else {
         sendFriendRequestButton.innerText = "Friends";
