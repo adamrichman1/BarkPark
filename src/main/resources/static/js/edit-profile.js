@@ -73,10 +73,19 @@ function populateDogList(dogs) {
                 removeDog(formData);
             });
 
+            let rollButton = document.createElement('button');
+            rollButton.id = "roll-dog-button";
+            rollButton.className = "btn btn-warning";
+            rollButton.textContent = 'Roll Over';
+            rollButton.addEventListener('click', function() {
+                window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            });
+
             dogData.append(nameElement);
             dogData.append(breedElement);
             dogData.append(ageElement);
             dogData.append(deleteButton);
+            dogData.append(rollButton);
 
             listItem.appendChild(dogData);
 
