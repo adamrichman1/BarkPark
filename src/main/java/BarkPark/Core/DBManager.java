@@ -14,23 +14,14 @@ import java.sql.*;
 public abstract class DBManager {
 
     private static Logger logger = LoggerFactory.getLogger(DBManager.class);
-    protected static String dbURL = "jdbc:postgresql://localhost:5432/postgres";
-
-    /**
-     * Used to initialize DBManager resources
-     *
-     * @param dbURL the URL of the DB to connect to
-     */
-    public static void initialize(String dbURL) {
-        DBManager.dbURL = dbURL;
-    }
+    private static String dbURL = "jdbc:postgresql://localhost:5432/postgres";
 
     /**
      * Used to connect to the DB
      *
      * @return a Connection object for the DB
      */
-    protected static Connection connect(String dbURL) {
+    private static Connection connect(String dbURL) {
         Connection c = null;
         try {
             if (dbURL != null) c = DriverManager.getConnection(dbURL);
@@ -51,7 +42,7 @@ public abstract class DBManager {
      *
      * @param c the Connection object to close
      */
-    protected static void close(Connection c) {
+    private static void close(Connection c) {
         try {
             c.close();
         } catch(SQLException e) {
@@ -184,7 +175,7 @@ public abstract class DBManager {
      * @param queryParams the parameters to prepare the statement with
      * @return the prepared statement
      */
-    protected static PreparedStatement prepareStatement(PreparedStatement statement, Object... queryParams) {
+    private static PreparedStatement prepareStatement(PreparedStatement statement, Object... queryParams) {
         try {
             int i = 1;
             for (Object queryParam: queryParams) {
@@ -196,13 +187,5 @@ public abstract class DBManager {
             System.exit(1);
             return null;
         }
-    }
-
-    /**
-     * Package-private getters for class variables - helps with testing
-     * @return class variables
-     */
-    String getDbURL(){
-        return dbURL;
     }
 }
