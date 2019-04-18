@@ -37,11 +37,12 @@
                 <li><a href="http://localhost:8080/home">Home</a></li>
                 <li><a id="edit-profile-link">My Profile</a></li>
                 <li><a id="friend-request-link">Friend Requests</a></li>
-                <li class="active"><a>Friends</a></li>
+                <li><a id="friends-link">Friends</a></li>
                 <script>
                     let username = sessionStorage.getItem('username');
                     document.getElementById('edit-profile-link').setAttribute("href", "http://localhost:8080/editProfile?username=" + username);
                     document.getElementById('friend-request-link').setAttribute("href", "http://localhost:8080/friendRequests?username=" + username);
+                    document.getElementById('friends-link').setAttribute("href", "http://localhost:8080/friends?username=" + username);
                 </script>
             </ul>
         </div><!--/.nav-collapse -->
@@ -51,7 +52,7 @@
 <div class="container">
 
     <div class="main-div" id="main-div">
-        <h1>Users in the Park</h1>
+        <h1 id="park-label"></h1>
         <h4 id="request-header" class="lead"></h4>
 
         <ul id="request-list" class="list-group"></ul>

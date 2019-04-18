@@ -176,16 +176,15 @@ public class UserRestController {
     /**
      * Used to leave a park
      *
-     * @param request the HttpRequest entity containing header information
-     * @return a ResponseEntity to the user
+     * @param parkName the name of the park
+     * @param username the username of the user leaving the park
+     * @param model the model to populate
+     * @return the park template to the user
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/leavePark", headers = "Accept=application/json")
-    public ResponseEntity leavePark(HttpServletRequest request) {
-        if (!ParkDBManager.isOwnerInPark(request.getHeader("parkName"), request.getHeader("username"))) {
-            return new ResponseEntity<>("User not in park", HttpStatus.BAD_REQUEST);
-        }
-        ParkDBManager.deleteUserFromPark(request.getHeader("parkName"), request.getHeader("username"));
-        return new ResponseEntity(HttpStatus.OK);
+    @RequestMapping(method = RequestMethod.GET, value = "/leavePark", headers = "Accept=application/json")
+    public String leavePark(@RequestParam("parkName") String parkName, @RequestParam("username") String username, Model model) {
+        ParkDBManager.deleteUserFromPark(parkName, username);
+        return getUsersInPark(parkName, model);
     }
 
     /**
