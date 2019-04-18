@@ -1,8 +1,6 @@
 package BarkPark.Users;
 
 import BarkPark.Dogs.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -296,8 +293,9 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/friendRequests", headers = "Accept=application/json")
     public String getPendingFriendRequests(@RequestParam("username") String username, Model model) {
-        model.addAttribute("friends", new JSONArray(Arrays.toString(FriendsDBManager.getPendingFriendRequests(username).stream()
-                .map(UserDBManager::getUserProfile).toArray())).toString());
+        model.addAttribute("userList", new UserList(FriendsDBManager.getPendingFriendRequests(username).stream()
+                .map(UserDBManager::getUserProfile)
+                .collect(Collectors.toList())));
         return "friend-requests";
     }
 
