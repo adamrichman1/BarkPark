@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class contains abstract methods that represent required endpoints to be implemented for Users.
@@ -296,13 +297,16 @@ public class UserRestController {
     /**
      * Used to find users by name
      *
-     * @param request the HttpRequest entity containing header information
-     * @return a ResponseEntity to the user
+     * @param name the name of the user to search by
+     * @param model the model to populate the template with
+     * @return the user-list template to the user
      */
     @RequestMapping(method = RequestMethod.GET, value = "/findFriendsByName", headers = "Accept=application/json")
-    public ResponseEntity findFriendsByName(HttpServletRequest request) {
-        List<String> usernames = UserDBManager.findFriendsByName(request.getHeader("name"));
-        return new ResponseEntity<>(usernames.stream().map(UserDBManager::getUserProfile), HttpStatus.OK);
+    public String findFriendsByName(@RequestParam("name") String name, Model model) {
+        model.addAttribute("users", UserDBManager.findFriendsByName(name).stream()
+                .map(UserDBManager::getUserProfile)
+                .collect(Collectors.toList()));
+        return "user-list";
     }
 
     /**
