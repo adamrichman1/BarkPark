@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -182,6 +183,22 @@ public class UserRestController {
     }
 
     /**
+     * Finds a list of people in a park
+     *
+     * @param parkName the name of the park
+     * @param model the model to populate with data
+     * @return the park template to the user
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/park", headers = "Accept=application/json")
+    public String leavePark(@RequestParam("parkName") String parkName, Model model) {
+        model.addAttribute("users", new UserList(new ArrayList<>(
+                Arrays.stream(ParkDBManager.getOwnersInPark(parkName))
+                        .map(UserDBManager::getUserProfile)
+                        .collect(Collectors.toList()))));
+        return "park";
+    }
+
+    /**
      * Used to initiate a dog party
      *
      * @param dogParty a DogParty object
@@ -337,7 +354,7 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/findFriendsByName", headers = "Accept=application/json")
     public String findFriendsByName(@RequestParam("name") String name, Model model) {
-        model.addAttribute("users", new UserList(new ArrayList<>(UserDBManager.findFriendsByName(name).stream()
+        model.addAttribute("users", new UserList(new ArrayList<>(UserDBManager.findFriendsByName(name.toLowerCase()).stream()
                 .map(UserDBManager::getUserProfile)
                 .collect(Collectors.toList()))));
         return "search-results";

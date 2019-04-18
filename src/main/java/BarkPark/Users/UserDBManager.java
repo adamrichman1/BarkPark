@@ -93,7 +93,7 @@ public class UserDBManager extends DBManager {
      * @return a list of all possible usernames mapping to the name provided
      */
     static List<String> findFriendsByName(String name) {
-        String sql = "SELECT username FROM " + userTable + " WHERE name LIKE ?";
+        String sql = "SELECT username FROM " + userTable + " WHERE lower(name) LIKE ?";
         return populateUserList(executeQuery(sql, "%" + name + "%"));
     }
 

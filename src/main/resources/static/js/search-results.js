@@ -35,6 +35,6 @@ function populateSearchResults(searchResults) {
         }
     } else {
         let requestHeader = document.getElementById('request-header');
-        requestHeader.innerHTML = '<em>No pending friend requests</em>';
+        requestHeader.innerHTML = '<em>No matching users were found</em>';
     }
 }

@@ -55,6 +55,9 @@ function createMarkers(places) {
 
         let li = document.createElement('li');
         li.textContent = place.name;
+        let placeLink = document.createElement('a');
+        placeLink.href = "";
+        li.appendChild(placeLink);
         placesList.appendChild(li);
 
         bounds.extend(place.geometry.location);

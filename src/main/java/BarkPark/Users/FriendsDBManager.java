@@ -48,8 +48,8 @@ public class FriendsDBManager extends DBManager {
      * @param friendUsername username of user who received request
      */
     static void removeFriend(String username, String friendUsername) {
-        String sql = "DELETE FROM " + friendsTable + " WHERE user1=? AND user2=?";
-        executeUpdate(sql, username, friendUsername);
+        String sql = "DELETE FROM " + friendsTable + " WHERE user1 IN (?, ?) AND user2 IN (?, ?)";
+        executeUpdate(sql, username, friendUsername, username, friendUsername);
     }
 
     /**
