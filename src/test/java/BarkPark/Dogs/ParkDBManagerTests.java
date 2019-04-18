@@ -1,6 +1,5 @@
 package BarkPark.Dogs;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,14 +17,6 @@ public class ParkDBManagerTests {
     public void setUp() {
         ParkDBManager.dropParkTable();
         ParkDBManager.createParkTable();
-    }
-
-    /**
-     * Shutdown operations
-     */
-    @After
-    public void teardown() {
-        ParkDBManager.dropParkTable();
     }
 
     /**

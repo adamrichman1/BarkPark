@@ -28,7 +28,7 @@ import java.io.IOException;
 public class Application {
     private static Logger logger = LoggerFactory.getLogger(Application.class);
     private static Thread dogAgeTracker;
-    private static boolean dropTable = false;
+    private static boolean dropTable = true;
 
     /**
      * This method is used on startup and is called implicitly by Spring Boot
