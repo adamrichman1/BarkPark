@@ -45,7 +45,9 @@ function populateDogList(dogs) {
 }
 
 function getFriends(username) {
+    let friends = null;
     $.ajax({
+        async: false,
         url: "http://localhost:8080/getFriends",
         type: 'GET',
         contentType: "application/json",
@@ -54,7 +56,7 @@ function getFriends(username) {
         },
         success: function(data) {
             console.log(data);
-            establishFriendStatus(data);
+            friends = data;
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR.status);
@@ -63,27 +65,63 @@ function getFriends(username) {
             // TODO - ERROR HANDLE
         }
     });
+
+    let friendRequests = null;
+    $.ajax({
+        async: false,
+        url: "http://localhost:8080/getSentFriendRequests",
+        type: 'GET',
+        contentType: "application/json",
+        headers: {
+            "username": localStorage.getItem('username')
+        },
+        success: function(data) {
+            console.log(data);
+            friendRequests = data;
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR.status);
+            console.log(textStatus);
+            console.log(errorThrown);
+            // TODO - ERROR HANDLE
+        }
+    });
+
+    establishFriendStatus(friends, friendRequests, username);
 }
 
-function checkIfUsersAreFriends(userFriends) {
+function usersAreFriends(userFriends) {
     console.log(userFriends);
     return userFriends.some(function(friend) {
         return friend.username === sessionStorage.getItem("username");
     });
 }
 
-function establishFriendStatus(userFriends) {
+function pendingRequest(pendingRequests, otherUser) {
+    return pendingRequests.some(function(friend) {
+        return friend.username === otherUser;
+    });
+}
+
+function establishFriendStatus(userFriends, pendingRequests, otherUser) {
     let unfriendButton = document.getElementById('unfriend-button');
     let sendFriendRequestButton = document.getElementById('friend-button');
-    let usersAreFriends = checkIfUsersAreFriends(userFriends);
 
-    if (!usersAreFriends) {
+    if (otherUser === sessionStorage.getItem("username")) {
+        sendFriendRequestButton.hidden=true;
+        unfriendButton.hidden=true;
+    }
+    else if(!usersAreFriends(userFriends) && !pendingRequest(pendingRequests, otherUser)) {
         sendFriendRequestButton.innerText = "Send Friend Request";
         sendFriendRequestButton.className="btn btn-default";
         sendFriendRequestButton.addEventListener('click', friendRequestListener);
         unfriendButton.setAttribute('hidden', 'true');
         sendFriendRequestButton.hidden=false;
-    } else {
+    }
+    else if (pendingRequest(pendingRequests, otherUser)) {
+        changeButtonToPending();
+    }
+    else {
         sendFriendRequestButton.innerText = "Friends";
         sendFriendRequestButton.className="btn btn-success";
         sendFriendRequestButton.hidden=false;
