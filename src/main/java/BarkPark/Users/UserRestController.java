@@ -294,6 +294,8 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/friendRequests", headers = "Accept=application/json")
     public String getPendingFriendRequests(@RequestParam("username") String username, Model model) {
+        logger.info(Arrays.toString(FriendsDBManager.getPendingFriendRequests(username).stream()
+                        .map(UserDBManager::getUserProfile).toArray()));
         model.addAttribute("friends", Arrays.toString(FriendsDBManager.getPendingFriendRequests(username).stream()
                 .map(UserDBManager::getUserProfile).toArray()));
         return "friend-requests";
