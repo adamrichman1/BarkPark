@@ -31,20 +31,18 @@ function populateRequestList(requests) {
             addFriendButton.className = 'btn btn-success';
             addFriendButton.innerText = 'Add Friend';
             addFriendButton.addEventListener('click', function() {
-                const formData = {
-                    "username": sessionStorage.getItem('username'),
-                    "friendUsername": requests[i].username
-                };
-                console.log(formData);
                 $.ajax({
                     url: "http://localhost:8080/acceptFriendRequest",
                     type: 'POST',
-                    data: JSON.stringify(formData),
+                    headers: {
+                        "username": sessionStorage.getItem('username'),
+                        "friendUsername": requests[i].username
+                    },
                     contentType: "application/json",
                     success: function() {
                         allRequests.splice(i);
                         resetRequestList();
-                        populateRequestList(allDogs);
+                        populateRequestList(allRequests);
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         console.log(jqXHR.status);
