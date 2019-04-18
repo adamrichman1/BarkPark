@@ -106,9 +106,17 @@ public class FriendsDBManager extends DBManager {
      * @return a list of usernames that are pending friends of a user
      */
     static List<String> getPendingFriendRequests(String username) {
-        List<String> friends = findFriendsOfUser1(username, false);
-        friends.addAll(findFriendsOfUser2(username, false));
-        return friends;
+        return findFriendsOfUser2(username, false);
+    }
+
+    /**
+     * Finds all usernames of sent pending friend requests
+     *
+     * @param username the name of the username to find friend requests for
+     * @return a list of usernames that a user has sent friend requests to
+     */
+    static List<String> getSentPendingFriendRequests(String username) {
+        return findFriendsOfUser1(username, false);
     }
 
     /**

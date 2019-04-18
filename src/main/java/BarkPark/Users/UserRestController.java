@@ -279,19 +279,38 @@ public class UserRestController {
     @RequestMapping(method = RequestMethod.GET, value = "/getFriends", headers = "Accept=application/json")
     public ResponseEntity getFriends(HttpServletRequest request) {
         List<String> usernames = FriendsDBManager.getFriends(request.getHeader("username"));
-        return new ResponseEntity<>(usernames.stream().map(UserDBManager::getUserProfile), HttpStatus.OK);
+        return new ResponseEntity<>(usernames.stream()
+                .map(UserDBManager::getUserProfile)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     /**
-     * Used to get all friends of a user
+     * Used to get all friend requests of a user
+     *
+     * @param username the username of the user
+     * @param model the model to populate the template with
+     * @return a ResponseEntity to the user
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/friendRequests", headers = "Accept=application/json")
+    public String getPendingFriendRequests(@RequestParam("username") String username, Model model) {
+        model.addAttribute("friends", FriendsDBManager.getPendingFriendRequests(username).stream()
+                .map(UserDBManager::getUserProfile)
+                .collect(Collectors.toList()));
+        return "friend-requests";
+    }
+
+    /**
+     * Used to get all sent friend requests of a user
      *
      * @param request the HttpRequest entity containing header information
      * @return a ResponseEntity to the user
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/getFriendRequests", headers = "Accept=application/json")
-    public ResponseEntity getPendingFriendRequests(HttpServletRequest request) {
-        List<String> usernames = FriendsDBManager.getPendingFriendRequests(request.getHeader("username"));
-        return new ResponseEntity<>(usernames.stream().map(UserDBManager::getUserProfile), HttpStatus.OK);
+    @RequestMapping(method = RequestMethod.GET, value = "/getSentFriendRequests", headers = "Accept=application/json")
+    public ResponseEntity getSentPendingFriendRequests(HttpServletRequest request) {
+        List<String> usernames = FriendsDBManager.getSentPendingFriendRequests(request.getHeader("username"));
+        return new ResponseEntity<>(usernames.stream()
+                .map(UserDBManager::getUserProfile)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     /**

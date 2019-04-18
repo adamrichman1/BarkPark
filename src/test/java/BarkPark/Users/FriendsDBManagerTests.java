@@ -127,6 +127,36 @@ public class FriendsDBManagerTests {
         List<String> adamsFriends = Arrays.asList("josh", "joe", "chris");
 
         // Add and accept friend request
+        FriendsDBManager.addFriendRequest("josh", "adam");
+
+        // Add and accept friend request
+        FriendsDBManager.addFriendRequest("joe", "adam");
+
+        // Add and accept friend request
+        FriendsDBManager.addFriendRequest("chris", "adam");
+
+        // Friend request but flipped
+        FriendsDBManager.addFriendRequest("adam", "jon");
+
+        // Add and accept friend request
+        FriendsDBManager.addFriendRequest("adam", "sohel");
+        FriendsDBManager.acceptFriendRequest("sohel", "adam");
+
+        // Find friends
+        List<String> friends = FriendsDBManager.getPendingFriendRequests("adam");
+        adamsFriends.forEach(friend -> assertTrue(friends.contains(friend)));
+        assertFalse(friends.contains("sohel"));
+        assertFalse(friends.contains("jon"));
+    }
+
+    /**
+     * Tests getSentPendingFriendRequests()
+     */
+    @Test
+    public void testGetSentPendingFriendRequests() {
+        List<String> adamsFriends = Arrays.asList("josh", "joe", "chris");
+
+        // Add and accept friend request
         FriendsDBManager.addFriendRequest("adam", "josh");
 
         // Add and accept friend request
@@ -135,19 +165,18 @@ public class FriendsDBManagerTests {
         // Add and accept friend request
         FriendsDBManager.addFriendRequest("adam", "chris");
 
+        // Friend request but flipped
+        FriendsDBManager.addFriendRequest("jon", "adam");
+
         // Add and accept friend request
         FriendsDBManager.addFriendRequest("adam", "sohel");
         FriendsDBManager.acceptFriendRequest("sohel", "adam");
 
-        // Add and accept friend request for a different user
-        FriendsDBManager.addFriendRequest("joe", "ian");
-        FriendsDBManager.acceptFriendRequest("ian", "joe");
-
         // Find friends
-        List<String> friends = FriendsDBManager.getPendingFriendRequests("adam");
+        List<String> friends = FriendsDBManager.getSentPendingFriendRequests("adam");
         adamsFriends.forEach(friend -> assertTrue(friends.contains(friend)));
         assertFalse(friends.contains("sohel"));
-        assertFalse(friends.contains("ian"));
+        assertFalse(friends.contains("jon"));
     }
 
     /**
