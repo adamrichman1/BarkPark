@@ -1,5 +1,6 @@
 package BarkPark.Dogs;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,6 +15,14 @@ public class PartyDBManagerTests {
     public void setup() {
         PartyDBManager.dropPartyTable();
         PartyDBManager.createPartyTable();
+    }
+
+    /**
+     * Shutdown operations
+     */
+    @After
+    public void teardown() {
+        PartyDBManager.dropPartyTable();
     }
 
     /**

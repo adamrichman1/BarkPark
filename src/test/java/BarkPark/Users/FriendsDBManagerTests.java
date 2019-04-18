@@ -1,5 +1,6 @@
 package BarkPark.Users;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,6 +19,14 @@ public class FriendsDBManagerTests {
     public void setup() {
         FriendsDBManager.dropFriendsTable();
         FriendsDBManager.createFriendsTable();
+    }
+
+    /**
+     * Shutdown operations
+     */
+    @After
+    public void teardown() {
+        FriendsDBManager.dropFriendsTable();
     }
 
     /**

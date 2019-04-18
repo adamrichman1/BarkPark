@@ -1,5 +1,6 @@
 package BarkPark.Dogs;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +20,14 @@ public class DogDBManagerTest {
         DogDBManager.dropDogTable();
         DogDBManager.createDogTable();
         dogDBManager = DogDBManager.getInstance();
+    }
+
+    /**
+     * Shutdown operations
+     */
+    @After
+    public void teardown() {
+        DogDBManager.dropDogTable();
     }
 
     /**
