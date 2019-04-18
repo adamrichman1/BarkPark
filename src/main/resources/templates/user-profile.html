@@ -61,7 +61,10 @@
 </div><!-- /.container -->
 
 <script>
+    setProfileUsername('[[${user.username}]]');
     populateDogList([[${user.dogs}]]);
+    console.log(localStorage.getItem('username'));
+    getFriends('[[${user.username}]]');
 </script>
 
 <!--&lt;!&ndash; Bootstrap core JavaScript-->

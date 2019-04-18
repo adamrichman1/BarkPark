@@ -1,3 +1,9 @@
+let profileUsername;
+
+function setProfileUsername(username) {
+    profileUsername = username;
+}
+
 function populateDogList(dogs) {
     if (dogs.length !== 0) {
         let dogListHeader = document.getElementById('dog-list-header');
@@ -38,22 +44,70 @@ function populateDogList(dogs) {
     }
 }
 
-let friendManagementDiv = document.getElementById('friend-management');
-let sendFriendRequestButton = document.createElement('send-friend-request-button');
-sendFriendRequestButton.className="btn btn-success";
-sendFriendRequestButton.innerText = "Send Friend Request";
+function getFriends(username) {
+    $.ajax({
+        url: "http://localhost:8080/getFriends",
+        type: 'GET',
+        contentType: "application/json",
+        headers: {
+            "username": username
+        },
+        success: function(data) {
+            console.log(data);
+            establishFriendStatus(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR.status);
+            console.log(textStatus);
+            console.log(errorThrown);
+            // TODO - ERROR HANDLE
+        }
+    });
+}
 
-// TODO: make a check friendship function.
+function checkIfUsersAreFriends(userFriends) {
+    console.log(userFriends);
 
-sendFriendRequestButton.addEventListener('click', function () {
-    const formData = {
-        "sender": localStorage.getItem('username'),
-        "receiver": document.getElementById('profile-username').value
-    };
+    if(userFriends.length !== 0) {
+        userFriends.forEach(function(friend) {
+            if(friend.username === localStorage.getItem('username')) {
+                return true;
+            }
+        });
+    }
+    return false;
+}
+
+function establishFriendStatus(userFriends) {
+    let friendManagementDiv = document.getElementById('friend-management');
+    let sendFriendRequestButton = document.createElement('send-friend-request-button');
+
+    let usersAreFriends = checkIfUsersAreFriends(userFriends);
+
+    if (!usersAreFriends) {
+        sendFriendRequestButton.innerText = "Send Friend Request";
+        sendFriendRequestButton.className="btn btn-default";
+        friendManagementDiv.appendChild(sendFriendRequestButton);
+        sendFriendRequestButton.addEventListener('click', friendRequestListener);
+    } else {
+        sendFriendRequestButton.innerText = "Friends";
+        sendFriendRequestButton.className="btn btn-success";
+        friendManagementDiv.appendChild(sendFriendRequestButton);
+        sendFriendRequestButton.removeEventListener('click', friendRequestListener);
+    }
+}
+
+function friendRequestListener() {
+    console.log(localStorage.getItem('username'));
+    console.log(profileUsername);
+
     $.ajax({
         url: "http://localhost:8080/sendFriendRequest",
         type: 'POST',
-        data: JSON.stringify(formData),
+        headers: {
+            "username": localStorage.getItem('username'),
+            "friendUsername": profileUsername
+        },
         contentType: "application/json",
         success: function() {
             changeButtonToPending();
@@ -65,9 +119,11 @@ sendFriendRequestButton.addEventListener('click', function () {
             // TODO - ERROR HANDLE
         }
     });
-});
+}
 
 function changeButtonToPending() {
+    let friendManagementDiv = document.getElementById('friend-management');
+    let sendFriendRequestButton = document.createElement('send-friend-request-button');
     friendManagementDiv.removeChild(sendFriendRequestButton);
     let pendingButton = document.createElement('pending-button');
     pendingButton.className='btn btn-default';
