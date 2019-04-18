@@ -90,7 +90,7 @@ public abstract class DBManager {
      * @param rs the ResultSet object containing data from the query
      * @param id the id of the column to extract from the ResultSet
      * @param c the Class to convert the ResultSet column to
-     * @return an array of Team objects containing team data from the query
+     * @return the deserialized result set col
      */
     protected static <S> S deserializeResultSetCol(ResultSet rs, String id, Class<S> c) {
         try {
