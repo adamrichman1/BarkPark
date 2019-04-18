@@ -75,6 +75,7 @@ function checkIfUsersAreFriends(userFriends) {
 function establishFriendStatus(userFriends) {
     let sendFriendRequestButton = document.getElementById('friend-button');
     let usersAreFriends = checkIfUsersAreFriends(userFriends);
+    let unfriendButton = document.getElementById('unfriend-button');
 
     if (!usersAreFriends) {
         sendFriendRequestButton.innerText = "Send Friend Request";
@@ -85,6 +86,11 @@ function establishFriendStatus(userFriends) {
         sendFriendRequestButton.innerText = "Friends";
         sendFriendRequestButton.className="btn btn-success";
         sendFriendRequestButton.hidden=false;
+
+        unfriendButton.innerText="Unfriend";
+        unfriendButton.className="btn btn-danger";
+        unfriendButton.addEventListener('click', unfriendListener);
+        unfriendButton.hidden=false;
     }
 }
 
@@ -99,6 +105,27 @@ function friendRequestListener() {
         contentType: "application/json",
         success: function() {
             changeButtonToPending();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR.status);
+            console.log(textStatus);
+            console.log(errorThrown);
+            // TODO - ERROR HANDLE
+        }
+    });
+}
+
+function unfriendListener() {
+    $.ajax({
+        url: "http://localhost:8080/removeFriend",
+        type: 'DELETE',
+        headers: {
+            "username": sessionStorage.getItem('username'),
+            "friendUsername": profileUsername
+        },
+        contentType: "application/json",
+        success: function() {
+            getFriends(profileUsername);
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log(jqXHR.status);
