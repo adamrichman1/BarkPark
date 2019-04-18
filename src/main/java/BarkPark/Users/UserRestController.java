@@ -20,7 +20,6 @@ import java.util.List;
 public class UserRestController {
 
     private static Logger logger = LoggerFactory.getLogger(UserRestController.class);
-    private static UserDBManager dbManager = new UserDBManager();
     private static DogDBManager dogDBManager = DogDBManager.getInstance();
 
     /**
@@ -32,11 +31,11 @@ public class UserRestController {
     @RequestMapping(method = RequestMethod.POST, value = "/login", headers = "Accept=application/json")
     public @ResponseBody ResponseEntity login(@RequestBody User user) {
         logger.info("LOGIN");
-        if (!dbManager.userExists(user.getUsername())) {
+        if (!UserDBManager.userExists(user.getUsername())) {
             logger.warn("Invalid username");
             return new ResponseEntity<>("Invalid username", HttpStatus.BAD_REQUEST);
         }
-        else if (!dbManager.passwordValid(user.getUsername(), user.getPassword())){
+        else if (!UserDBManager.passwordValid(user.getUsername(), user.getPassword())){
             logger.warn("Invalid password");
             return new ResponseEntity<>("Invalid password", HttpStatus.BAD_REQUEST);
         }
@@ -92,7 +91,7 @@ public class UserRestController {
             return new ResponseEntity<>("Invalid registration form", HttpStatus.BAD_REQUEST);
         }
         // Check if user already exists
-        else if (dbManager.userExists(user.getUsername())) {
+        else if (UserDBManager.userExists(user.getUsername())) {
             logger.info("Username already exists");
             model.addAttribute("errorMsg", "Username already in use");
             return new ResponseEntity<>("Username already in use",  HttpStatus.BAD_REQUEST);
@@ -100,7 +99,7 @@ public class UserRestController {
         // Register user and return success
         else {
             logger.info("Success!");
-            dbManager.insertUserToDB(user.getUsername(), user.getPassword(), user.getName(), user.getEmail(),
+            UserDBManager.insertUserToDB(user.getUsername(), user.getPassword(), user.getName(), user.getEmail(),
                     user.getAge());
             return new ResponseEntity<>(HttpStatus.OK);
         }
@@ -117,7 +116,7 @@ public class UserRestController {
                 user.getPassword() == null || user.getPassword().equals("") ||
                 user.getEmail() == null || user.getEmail().equals("") ||
                 user.getName() == null || user.getName().equals("") ||
-                user.getAge() == null;
+                user.getAge() == 0;
     }
 
     /**
