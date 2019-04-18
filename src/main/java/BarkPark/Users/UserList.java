@@ -1,5 +1,7 @@
 package BarkPark.Users;
 
+import BarkPark.Application;
+
 import java.util.List;
 
 public class UserList {
@@ -16,4 +18,9 @@ public class UserList {
     public void setUsers(List<User> users) {
         this.users = users;
     }
+
+    public String toString() {
+        return Application.toString(this);
+    }
+
 }
