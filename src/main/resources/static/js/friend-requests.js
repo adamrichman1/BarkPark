@@ -1,9 +1,3 @@
-let allRequests = null;
-
-function setRequestList(requestList) {
-    allRequests = requestList;
-}
-
 function populateRequestList(requests) {
     if (requests.length !== 0) {
         let requestHeader = document.getElementById('request-header');
@@ -40,9 +34,7 @@ function populateRequestList(requests) {
                     },
                     contentType: "application/json",
                     success: function() {
-                        allRequests.splice(i);
-                        resetRequestList();
-                        populateRequestList(allRequests);
+                        window.location = "http://localhost:8080/friends?username=" + sessionStorage.getItem('username');
                     },
                     error: function(jqXHR, textStatus, errorThrown){
                         console.log(jqXHR.status);
@@ -57,20 +49,11 @@ function populateRequestList(requests) {
             userData.append(nameElement);
             userData.append(usernameElement);
             userData.append(addFriendButton);
-
             listItem.appendChild(userData);
-
             requestList.appendChild(listItem);
         }
     } else {
         let requestHeader = document.getElementById('request-header');
         requestHeader.innerHTML = '<em>No pending friend requests</em>';
-    }
-}
-
-function resetRequestList() {
-    let requestList = document.getElementById('request-list');
-    while(requestList.firstChild) {
-        requestList.removeChild(requestList.firstChild);
     }
 }

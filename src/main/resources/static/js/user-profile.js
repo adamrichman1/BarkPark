@@ -67,15 +67,9 @@ function getFriends(username) {
 
 function checkIfUsersAreFriends(userFriends) {
     console.log(userFriends);
-
-    if(userFriends.length !== 0) {
-        userFriends.forEach(function(friend) {
-            if(friend.username === sessionStorage.getItem('username')) {
-                return true;
-            }
-        });
-    }
-    return false;
+    return userFriends.some(function(friend) {
+        return friend.username === sessionStorage.getItem("username");
+    });
 }
 
 function establishFriendStatus(userFriends) {

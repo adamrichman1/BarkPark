@@ -286,6 +286,20 @@ public class UserRestController {
     }
 
     /**
+     * Used to get all friends of a user
+     *
+     * @param username the username of the user
+     * @param model the model to populate the template with
+     * @return the friends template to the user
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/friends", headers = "Accept=application/json")
+    public String getFriends(@RequestParam("username")String username, Model model) {
+        model.addAttribute("friends", new UserList(new ArrayList<>(FriendsDBManager.getFriends(username).stream()
+                .map(UserDBManager::getUserProfile).collect(Collectors.toList()))));
+        return "friends";
+    }
+
+    /**
      * Used to get all friend requests of a user
      *
      * @param username the username of the user
