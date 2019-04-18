@@ -297,13 +297,12 @@ public class UserRestController {
     /**
      * Used to get another user's profile page
      *
-     * @param request the HttpRequest entity containing header information
      * @param model the model to populate the template with
      * @return a ResponseEntity to the user
      */
     @RequestMapping(method = RequestMethod.GET, value = "/userProfile", headers = "Accept=application/json")
-    public String getProfilePage(HttpServletRequest request, Model model) {
-        model.addAttribute("user", UserDBManager.getUserProfile(request.getHeader("username")));
+    public String getProfilePage(@RequestParam("username") String username, Model model) {
+        model.addAttribute("user", UserDBManager.getUserProfile(username));
         return "user-profile";
     }
 }

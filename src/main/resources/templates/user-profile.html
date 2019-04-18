@@ -12,6 +12,8 @@
     <title>BarkPark</title>
 
     <script type="text/javascript" th:src="@{/js/user-profile.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -45,21 +47,22 @@
 
     <div class="main-div">
         <h1 id="profile-name" th:text="${user.name}"></h1>
-        <p id="profile-username" class="lead" th:text="${user.username}"></p>
+        <div id="friend-management" class="container">
+
+        </div>
+        <p id="profile-username" class="lead" th:text="'Username: ' + ${user.username}"></p>
         <p class="small" th:text="'Age: ' + ${user.age}"></p>
 
         <p id="dog-list-header" class="lead"></p>
 
         <ul id="dog-list" class="list-group"></ul>
-
-    </div>
-
-    <div id="friend-management" class="container">
-
     </div>
 
 </div><!-- /.container -->
 
+<script>
+    populateDogList([[${user.dogs}]]);
+</script>
 
 <!--&lt;!&ndash; Bootstrap core JavaScript-->
 <!--================================================== &ndash;&gt;-->
