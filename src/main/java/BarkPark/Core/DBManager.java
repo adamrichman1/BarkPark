@@ -14,7 +14,7 @@ import java.sql.*;
 public abstract class DBManager {
 
     private static Logger logger = LoggerFactory.getLogger(DBManager.class);
-    private static String dbURL = "jdbc:postgresql://localhost:5432/postgres";
+    protected static String dbURL = "jdbc:postgresql://localhost:5432/postgres";
 
     /**
      * Used to initialize DBManager resources
@@ -30,7 +30,7 @@ public abstract class DBManager {
      *
      * @return a Connection object for the DB
      */
-    private static Connection connect(String dbURL) {
+    protected static Connection connect(String dbURL) {
         Connection c = null;
         try {
             if (dbURL != null) c = DriverManager.getConnection(dbURL);
@@ -51,7 +51,7 @@ public abstract class DBManager {
      *
      * @param c the Connection object to close
      */
-    private static void close(Connection c) {
+    protected static void close(Connection c) {
         try {
             c.close();
         } catch(SQLException e) {
@@ -96,7 +96,7 @@ public abstract class DBManager {
     /**
      * Used to convert a ResultSet object into a specific class
      *
-     * @param rs the ResultSet object containing match data from the query
+     * @param rs the ResultSet object containing data from the query
      * @param id the id of the column to extract from the ResultSet
      * @param c the Class to convert the ResultSet column to
      * @return an array of Team objects containing team data from the query
@@ -114,6 +114,27 @@ public abstract class DBManager {
     }
 
     /**
+     * Parses a String array from a ResultSet object following a DB query
+     *
+     * @param rs the ResultSet object to parse
+     * @param id the id of the column
+     * @param resultSetIterated true if the ResultSet has already been iterated over, false otherwise
+     * @return an array of String objects
+     */
+    protected static String[] deserializeStringArray(ResultSet rs, String id, boolean resultSetIterated) {
+        try {
+            if (resultSetIterated || rs.next()) {
+                String toParse = rs.getString(id).replace("{", "").replace("}", "");
+                return toParse.equals("") ? new String[] {} : toParse.split(",");
+            }
+        } catch (SQLException e) {
+            logger.error(">>> ERROR: Couldn't extract ResultSet column " + id, e);
+            System.exit(1);
+        }
+        return null;
+    }
+
+    /**
      * Used to deserialize an object
      *
      * @param data the data to deserialize
@@ -121,7 +142,7 @@ public abstract class DBManager {
      * @param <S> the generic type that the data will be deserialized into
      * @return the deserialized form of the data provided
      */
-    protected static <S> S deserializeString(String data, Class<S> c) {
+    private static <S> S deserializeString(String data, Class<S> c) {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(data, c);
@@ -163,7 +184,7 @@ public abstract class DBManager {
      * @param queryParams the parameters to prepare the statement with
      * @return the prepared statement
      */
-    private static PreparedStatement prepareStatement(PreparedStatement statement, Object... queryParams) {
+    protected static PreparedStatement prepareStatement(PreparedStatement statement, Object... queryParams) {
         try {
             int i = 1;
             for (Object queryParam: queryParams) {
