@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -293,9 +294,9 @@ public class UserRestController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/friendRequests", headers = "Accept=application/json")
     public String getPendingFriendRequests(@RequestParam("username") String username, Model model) {
-        model.addAttribute("userList", new UserList(FriendsDBManager.getPendingFriendRequests(username).stream()
+        model.addAttribute("userList", new UserList(new ArrayList<>(FriendsDBManager.getPendingFriendRequests(username).stream()
                 .map(UserDBManager::getUserProfile)
-                .collect(Collectors.toList())));
+                .collect(Collectors.toList()))));
         return "friend-requests";
     }
 

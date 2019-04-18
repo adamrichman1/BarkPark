@@ -2,20 +2,20 @@ package BarkPark.Users;
 
 import BarkPark.Application;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class UserList {
-    private List<User> users;
+    private ArrayList<User> users;
 
-    UserList(List<User> users) {
+    UserList(ArrayList<User> users) {
         this.users = users;
     }
 
-    public List<User> getUsers() {
+    public ArrayList<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(ArrayList<User> users) {
         this.users = users;
     }
 
